@@ -6,8 +6,8 @@ from lib.utilities import scale_image
 
 
 class Platform:
-    def __init__(self, platform_position):
-        self.platform_image = pg.image.load(PLATFORM_FILENAME)
+    def __init__(self, platform_position, texture):
+        self.platform_image = pg.image.load(texture)
         self.platform_image = scale_image(self.platform_image, SCALE)
 
         self.platform_position = platform_position

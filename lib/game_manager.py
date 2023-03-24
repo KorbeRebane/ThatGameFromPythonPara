@@ -1,5 +1,6 @@
 from lib.background import Background
-from lib.constants import FIRST_PLATFORM_POSITION, SECOND_PLATFORM_POSITION,FIRST_ENEMY_POSITION, SECOND_ENEMY_POSITION
+from lib.constants import FLOOR_POSITION, SECOND_PLATFORM_POSITION, THIRD_PLATFORM_POSITION, FOURTH_PLATFORM_POSITION, \
+    FIRST_ENEMY_POSITION, SECOND_ENEMY_POSITION, FLOOR_FILENAME, PLATFORM_FILENAME
 from lib.enemy import Enemy
 from lib.interface import GameScreen
 from lib.player import Player
@@ -11,7 +12,8 @@ class GameManager:
     def __init__(self, sound_manager):
         self.sound_manager = sound_manager
         self.player = Player()
-        self.platforms = [Platform(FIRST_PLATFORM_POSITION), Platform(SECOND_PLATFORM_POSITION)]
+        self.platforms = [Platform(FLOOR_POSITION, FLOOR_FILENAME), Platform(SECOND_PLATFORM_POSITION, PLATFORM_FILENAME),
+                          Platform(THIRD_PLATFORM_POSITION, PLATFORM_FILENAME), Platform(FOURTH_PLATFORM_POSITION, PLATFORM_FILENAME)]
         self.background = Background()
         self.interface = GameScreen()
         self.enemies = [Enemy(FIRST_ENEMY_POSITION)]
@@ -23,8 +25,8 @@ class GameManager:
         self.background.draw_game_window(surface)
         self.player.draw(surface)
         self.interface.draw_health_points(surface, health_points_count=self.player.get_player_health_points())
-        #for enemy in self.enemies:
-            #enemy.draw(surface)
+        for enemy in self.enemies:
+            enemy.draw(surface)
         for platform in self.platforms:
             platform.draw(surface)
 
