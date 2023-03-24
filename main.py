@@ -3,7 +3,7 @@ import pygame as pg
 from lib.constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
 from lib.game_manager import GameManager
 from lib.sound import SoundManager
-from lib.utilities import get_all_pressed_keys, get_all_upped_keys
+from lib.utilities import get_all_pressed_keys
 from menu.menu import MenuManager
 
 pg.init()
@@ -21,8 +21,7 @@ managers = {
 }
 
 while True:
-    keys = get_all_pressed_keys()
-    keys_up = get_all_upped_keys()
+    keys, keys_up = get_all_pressed_keys()
 
     manager = managers[state]
     state = manager.update(pressed_keys=keys, upped_keys=keys_up)

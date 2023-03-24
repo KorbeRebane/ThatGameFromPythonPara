@@ -12,17 +12,17 @@ class Enemy:
         self.enemy_image_rect = self.enemy_image.get_rect()
 
         self.health_points = HEALTH_POINTS_ENEMY
-        self.enemy_position = enemy_position
-        self.enemy_damage = ENEMY_DAMAGE
+        self.position = enemy_position
+        self.damage = ENEMY_DAMAGE
         self.is_alive = True
 
     def draw(self, surface):
         if self.is_alive:
-            surface.blit(self.enemy_image, self.enemy_position)
+            surface.blit(self.enemy_image, self.position)
 
     def give_damage(self):
         # тут будут условия на нанесение урона
-        return self.enemy_damage
+        return self.damage
 
     def get_damage(self, player_rect):
         # тут будут условия на получение урона
@@ -38,8 +38,8 @@ class Enemy:
 
     @property
     def rect(self):
-        x = self.enemy_position[0]
-        y = self.enemy_position[1]
+        x = self.position[0]
+        y = self.position[1]
         width = self.enemy_image.get_width()
         height = self.enemy_image.get_height()
         return Rect(x, y, width, height)

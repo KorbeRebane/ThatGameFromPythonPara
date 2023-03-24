@@ -4,6 +4,7 @@ import pygame as pg
 
 def get_all_pressed_keys():
     pressed_keys = []
+    upped_keys = []
 
     events = pg.event.get()
     for event in events:
@@ -14,23 +15,16 @@ def get_all_pressed_keys():
                 need_to_exit = True
             else:
                 pressed_keys.append(event.key)
+        if event.type == pg.KEYUP:
+            upped_keys.append(event.key)
         if event.type == pg.QUIT:
             need_to_exit = True
         if need_to_exit:
             pg.quit()
             sys.exit()
 
-    return pressed_keys
+    return pressed_keys, upped_keys
 
-def get_all_upped_keys():
-    upped_keys = []
-
-    events = pg.event.get()
-    for event in events:
-        if event.type == pg.KEYUP:
-            upped_keys.append(event.key)
-
-    return upped_keys
 
 def scale_image(image, scale):
     width = image.get_width()

@@ -15,7 +15,7 @@ class Background:
 
     def draw_game_window(self, surface):
         surface.blit(self.fon_image, (0, 0))
-        self.draw_floor(surface)
+        # self.draw_floor(surface)
 
     def draw_floor(self, surface):
         surface.blit(self.floor_image, (0, FLOOR_HEIGHT))
