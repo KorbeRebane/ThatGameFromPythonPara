@@ -4,27 +4,26 @@ from pygame import Rect
 from lib.constants import PLAYER_FILENAME, SCALE, START_POSITION_X, PLAYER_SPEED, \
     START_POSITION_Y, HEALTH_POINTS, PLAYER_DAMAGE, WIN_POSITION, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
     SCREEN_HEIGHT, PLAYER_HEIGHT
-from lib.creature import Creature
 from lib.utilities import scale_image
 
 
-class Playerr:
-    def __init__(self):
-        self.player_image = pg.image.load(PLAYER_FILENAME)
-        self.player_image = scale_image(self.player_image, SCALE)
-        self.player_image_rect = self.player_image.get_rect()
+class Creature:
+    def __init__(self, image, position, health_points, damage):
+        self.image = pg.image.load(image)
+        self.image = scale_image(self.image, SCALE)
+        self.image_rect = self.image.get_rect()
 
-        self.position = [START_POSITION_X, START_POSITION_Y]
+        self.position = position
         self.speed = PLAYER_SPEED_LIST
-        self.health_points = HEALTH_POINTS
-        self.damage = PLAYER_DAMAGE
+        self.health_points = health_points
+        self.damage = damage
 
         self.walking_left = False
         self.walking_right = False
         self.jumps_count = 1
 
     def draw(self, surface):
-        surface.blit(self.player_image, self.position)
+        surface.blit(self.image, self.position)
 
     def jump(self):
         if self.jumps_count >= 0:
@@ -65,54 +64,24 @@ class Playerr:
         else:
             self.speed[1] += G * DELTA_T
 
-    def get_damage(self):
+    def get_damage(self, damage):
         # тут будут условия на получение урона
-        self.health_points -= 1
+        self.health_points -= damage
 
     def give_damage(self):
         # тут будут условия нанесения урона
         return self.damage
 
-    def game_states(self):
-        if self.health_points != 0:
-            if self.position[0] >= WIN_POSITION[0]:
-                self.position[0] = START_POSITION_X
-                self.health_points = 3
-                return "menu"
-            else:
-                return "game"
-        elif self.health_points == 0:
-            self.health_points = 3
-            return "menu"
-
     def get_player_position(self):
         return self.position
 
-    def get_player_health_points(self):
+    def get_health_points(self):
         return self.health_points
 
     @property
     def rect(self):
         x = self.position[0]
         y = self.position[1]
-        width = self.player_image.get_width()
-        height = self.player_image.get_height()
+        width = self.image.get_width()
+        height = self.image.get_height()
         return Rect(x, y, width, height)
-
-
-class Player(Creature):
-    def __init__(self):
-        super().__init__(PLAYER_FILENAME, [START_POSITION_X, START_POSITION_Y], HEALTH_POINTS, PLAYER_DAMAGE)
-
-    def game_states(self):
-        if self.health_points != 0:
-            if self.position[0] >= WIN_POSITION[0]:
-                self.position[0] = START_POSITION_X
-                self.health_points = 3
-                return "menu"
-            else:
-                return "game"
-        elif self.health_points == 0:
-            self.health_points = 3
-            return "menu"
-
