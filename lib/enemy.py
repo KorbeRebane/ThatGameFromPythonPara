@@ -1,11 +1,25 @@
 import pygame as pg
 from pygame import Rect
 
-from lib.constants import ENEMY_FILENAME, SCALE, HEALTH_POINTS_ENEMY, ENEMY_DAMAGE
+from lib.constants import ENEMY_FILENAME, SCALE, HEALTH_POINTS_ENEMY, ENEMY_DAMAGE, HEALTH_POINTS
+from lib.creature import Creature
 from lib.utilities import scale_image
 
+class Enemy(Creature):
+    def __init__(self, position):
+        super().__init__(ENEMY_FILENAME, position, HEALTH_POINTS, ENEMY_DAMAGE)
 
-class Enemy:
+    def get_damage(self, player_rect):
+        # тут будут условия на получение урона
+        if player_rect.colliderect(self.rect):
+            self.health_points = 1
+        # dying
+        if self.health_points == 0:
+            self.is_alive = False
+
+
+
+class Enemyy:
     def __init__(self, enemy_position):
         self.enemy_image = pg.image.load(ENEMY_FILENAME)
         self.enemy_image = scale_image(self.enemy_image, SCALE)

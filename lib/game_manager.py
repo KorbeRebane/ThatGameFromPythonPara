@@ -11,13 +11,12 @@ class GameManager:
 
     def __init__(self, sound_manager):
         self.sound_manager = sound_manager
-        # self.player = Player()
         self.player = Player()
-        self.platforms = [Platform(FLOOR_POSITION, FLOOR_FILENAME)] #Platform(SECOND_PLATFORM_POSITION, PLATFORM_FILENAME),
+        self.platforms = [Platform(FLOOR_POSITION, FLOOR_FILENAME), Platform(SECOND_PLATFORM_POSITION, PLATFORM_FILENAME)]
                         # Platform(THIRD_PLATFORM_POSITION, PLATFORM_FILENAME), Platform(FOURTH_PLATFORM_POSITION, PLATFORM_FILENAME)]
         self.background = Background()
         self.interface = GameScreen()
-        self.enemies = []
+        self.enemies = [Enemy(FIRST_ENEMY_POSITION)]
         self.platforms_rects = []
 
         sound_manager.play_music("back_music")

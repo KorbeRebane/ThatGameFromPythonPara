@@ -20,25 +20,24 @@ class Creature:
 
         self.walking_left = False
         self.walking_right = False
+        self.in_jump = False
         self.jumps_count = 1
 
+        self.is_alive = True
+
     def draw(self, surface):
-        surface.blit(self.image, self.position)
+        if self.is_alive:
+            surface.blit(self.image, self.position)
 
     def jump(self):
         if self.jumps_count >= 0:
             self.speed[1] = -JUMP_SPEED
             self.jumps_count -= 1
 
-    def move(self, pressed_keys, upped_keys, platform_rects):
-        if pg.K_d in pressed_keys:
-            self.walking_right = True
-        if pg.K_d in upped_keys:
-            self.walking_right = False
-        if pg.K_a in pressed_keys:
-            self.walking_left = True
-        if pg.K_a in upped_keys:
-            self.walking_left = False
+    def move_physically(self, platform_rects):
+        if self.in_jump:
+            self.jump()
+
 
         if self.walking_right and not self.walking_left:
             self.speed[0] = PLAYER_SPEED
@@ -51,9 +50,6 @@ class Creature:
             self.speed[0] = -PLAYER_SPEED
         if self.walking_left and pg.Rect.collidelist(self.rect.move(PLAYER_SPEED * -DELTA_T, -1), platform_rects) != -1:
             self.speed[0] = 0
-
-        if pg.K_SPACE in pressed_keys:
-            self.jump()
 
         self.position[0] += self.speed[0] * DELTA_T
         self.position[1] += self.speed[1] * DELTA_T
