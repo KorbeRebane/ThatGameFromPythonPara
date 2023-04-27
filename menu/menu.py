@@ -24,7 +24,7 @@ class MenuManager:
                              on_click=self.exit)
         self.buttons.append(button_exit)
 
-    def update(self, pressed_keys, upped_keys):
+    def update(self, pressed_keys, upped_keys, mouse_pressed, mouse_upped):
         if pg.mouse.get_pressed()[0]:
             mouse_position = pg.mouse.get_pos()
             mouse_x, mouse_y = mouse_position
