@@ -7,12 +7,12 @@ from lib.utilities import scale_image
 
 class Enemy(Creature):
     def __init__(self, position):
-        super().__init__(ENEMY_FILENAME, position, HEALTH_POINTS, ENEMY_DAMAGE)
+        super().__init__(ENEMY_FILENAME, ENEMY_FILENAME, position, HEALTH_POINTS, ENEMY_DAMAGE)
 
     def get_damage(self, player_rect):
         # тут будут условия на получение урона
         if player_rect.colliderect(self.rect):
-            self.health_points = 1
+            self.health_points -= 1
         # dying
         if self.health_points == 0:
             self.is_alive = False

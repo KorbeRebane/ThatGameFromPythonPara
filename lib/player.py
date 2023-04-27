@@ -2,14 +2,14 @@ import pygame as pg
 from pygame import Rect
 
 from lib.constants import PLAYER_FILENAME, SCALE, START_POSITION_X, PLAYER_SPEED, \
-    START_POSITION_Y, HEALTH_POINTS, PLAYER_DAMAGE, WIN_POSITION, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G
+    START_POSITION_Y, HEALTH_POINTS, PLAYER_DAMAGE, WIN_POSITION, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
+    PLAYER_ATTACK_FILENAME
 from lib.creature import Creature
 from lib.utilities import scale_image
 
-
 class Player(Creature):
     def __init__(self):
-        super().__init__(PLAYER_FILENAME, [START_POSITION_X, START_POSITION_Y], HEALTH_POINTS, PLAYER_DAMAGE)
+        super().__init__(PLAYER_FILENAME, PLAYER_ATTACK_FILENAME, [START_POSITION_X, START_POSITION_Y], HEALTH_POINTS, PLAYER_DAMAGE)
 
     def game_states(self):
         if self.health_points != 0:
@@ -38,6 +38,12 @@ class Player(Creature):
             self.in_jump = False
 
         self.move_physically(platform_rects)
+
+    def attack(self, mouse_pressed):
+        if mouse_pressed == 1:
+            self.image = self.attack_image
+            self.not_idle_counter = 60
+            self.is_attacking = True
 
 
 class Playerr:

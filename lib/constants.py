@@ -1,5 +1,5 @@
 # Масштаб
-SCALE = 1.3
+SCALE = 1
 
 # Параметры экрана и пола
 SCREEN_WIDTH = 1200 * SCALE
@@ -53,6 +53,7 @@ IMAGES_DIRECTORY = "source/images/"
 BACKGROUND_FILENAME = IMAGES_DIRECTORY + "wallpaper_cut.jpg"
 FLOOR_FILENAME = IMAGES_DIRECTORY + "floor.png"
 PLAYER_FILENAME = IMAGES_DIRECTORY + "player.jpg"
+PLAYER_ATTACK_FILENAME = IMAGES_DIRECTORY + "player_attack.png"
 ENEMY_FILENAME = IMAGES_DIRECTORY + "enemy.jpg"
 PLATFORM_FILENAME = IMAGES_DIRECTORY + "platform.png"
 HEALTH_POINT_FILENAME = IMAGES_DIRECTORY + "healt_point.png"

@@ -24,17 +24,19 @@ class GameManager:
     def draw(self, surface):
         self.background.draw_game_window(surface)
         self.player.draw(surface)
-        self.interface.draw_health_points(surface, health_points_count=self.player.get_health_points())
+        self.interface.draw_health_points(surface, health_points_count=self.player.get_health_points)
         for enemy in self.enemies:
             enemy.draw(surface)
         for platform in self.platforms:
             platform.draw(surface)
 
-    def update(self, pressed_keys, upped_keys):
+    def update(self, pressed_keys, upped_keys, mouse_pressed, mouse_upped):
         for platform in self.platforms:
             self.platforms_rects.append(platform.rect)
         self.player.move(pressed_keys, upped_keys, self.platforms_rects)
+        self.player.attack(mouse_pressed)
         for enemy in self.enemies:
-            enemy.get_damage(self.player.rect)
+            if self.player.is_attacking:
+                enemy.get_damage(self.player.rect)
         new_state = self.player.game_states()
         return new_state

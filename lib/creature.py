@@ -8,9 +8,12 @@ from lib.utilities import scale_image
 
 
 class Creature:
-    def __init__(self, image, position, health_points, damage):
-        self.image = pg.image.load(image)
-        self.image = scale_image(self.image, SCALE)
+    def __init__(self, image, attack_image, position, health_points, damage):
+        self.attack_image = pg.image.load(attack_image)
+        self.attack_image = scale_image(self.attack_image, SCALE)
+        self.idle_image = pg.image.load(image)
+        self.idle_image = scale_image(self.idle_image, SCALE)
+        self.image = self.idle_image
         self.image_rect = self.image.get_rect()
 
         self.position = position
@@ -20,14 +23,30 @@ class Creature:
 
         self.walking_left = False
         self.walking_right = False
+        self.looking_left = False
         self.in_jump = False
         self.jumps_count = 1
 
+        self.not_idle_counter = 0
         self.is_alive = True
+        self.is_attacking = False
 
     def draw(self, surface):
         if self.is_alive:
-            surface.blit(self.image, self.position)
+            if not self.looking_left:
+                surface.blit(self.image, self.position)
+            else:
+                image = pg.transform.flip(self.image, True, False)
+                surface.blit(image, self.position)
+
+        self.return_to_idle()
+
+    def return_to_idle(self):
+        if self.not_idle_counter != 0:
+            self.not_idle_counter -= 1
+        if not self.is_attacking or self.not_idle_counter == 0:
+            self.image = self.idle_image
+            self.is_attacking = False
 
     def jump(self):
         if self.jumps_count >= 0:
@@ -41,6 +60,7 @@ class Creature:
 
         if self.walking_right and not self.walking_left:
             self.speed[0] = PLAYER_SPEED
+            self.looking_left = False
         else:
             self.speed[0] = 0
         if self.walking_right and pg.Rect.collidelist(self.rect.move(PLAYER_SPEED * DELTA_T, -1), platform_rects) != -1:
@@ -48,6 +68,7 @@ class Creature:
 
         if self.walking_left and not self.walking_right:
             self.speed[0] = -PLAYER_SPEED
+            self.looking_left = True
         if self.walking_left and pg.Rect.collidelist(self.rect.move(PLAYER_SPEED * -DELTA_T, -1), platform_rects) != -1:
             self.speed[0] = 0
 
@@ -68,9 +89,7 @@ class Creature:
         # тут будут условия нанесения урона
         return self.damage
 
-    def get_player_position(self):
-        return self.position
-
+    @property
     def get_health_points(self):
         return self.health_points
 
