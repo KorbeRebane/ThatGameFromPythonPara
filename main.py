@@ -21,28 +21,11 @@ managers = {
 }
 
 while True:
-    keys, keys_up = get_all_pressed_keys()
+    keys, keys_up, mouse, mouse_up = get_all_pressed_keys()
 
     manager = managers[state]
-    state = manager.update(pressed_keys=keys, upped_keys=keys_up)
+    state = manager.update(pressed_keys=keys, upped_keys=keys_up, mouse_pressed=mouse, mouse_upped=mouse_up)
     manager.draw(surface=screen)
 
     pg.display.update()
     clock.tick(FPS)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

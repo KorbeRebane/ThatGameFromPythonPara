@@ -3,11 +3,48 @@ from pygame import Rect
 
 from lib.constants import PLAYER_FILENAME, SCALE, START_POSITION_X, PLAYER_SPEED, \
     START_POSITION_Y, HEALTH_POINTS, PLAYER_DAMAGE, WIN_POSITION, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
-    SCREEN_HEIGHT, PLAYER_HEIGHT
+    PLAYER_ATTACK_FILENAME
+from lib.creature import Creature
 from lib.utilities import scale_image
 
+class Player(Creature):
+    def __init__(self):
+        super().__init__(PLAYER_FILENAME, PLAYER_ATTACK_FILENAME, [START_POSITION_X, START_POSITION_Y], HEALTH_POINTS, PLAYER_DAMAGE)
 
-class Player:
+    def game_states(self):
+        if self.health_points != 0:
+            if self.position[0] >= WIN_POSITION[0]:
+                pass
+            else:
+                return "game"
+        elif self.health_points == 0:
+            self.health_points = 3
+            return "menu"
+
+    def move(self, pressed_keys, upped_keys, platform_rects):
+        if pg.K_d in pressed_keys:
+            self.walking_right = True
+        if pg.K_d in upped_keys:
+            self.walking_right = False
+        if pg.K_a in pressed_keys:
+            self.walking_left = True
+        if pg.K_a in upped_keys:
+            self.walking_left = False
+        if pg.K_SPACE in pressed_keys:
+            self.in_jump = True
+        else:
+            self.in_jump = False
+
+        self.move_physically(platform_rects)
+
+    def attack(self, mouse_pressed):
+        if mouse_pressed == 1:
+            self.image = self.attack_image
+            self.not_idle_counter = 60
+            self.is_attacking = True
+
+
+class Playerr:
     def __init__(self):
         self.player_image = pg.image.load(PLAYER_FILENAME)
         self.player_image = scale_image(self.player_image, SCALE)
@@ -97,3 +134,6 @@ class Player:
         width = self.player_image.get_width()
         height = self.player_image.get_height()
         return Rect(x, y, width, height)
+
+
+
