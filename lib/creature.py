@@ -31,13 +31,15 @@ class Creature:
         self.is_alive = True
         self.is_attacking = False
 
-    def draw(self, surface):
+    def draw(self, surface, camera_position):
+        new_x = self.position[0] - camera_position[0]
+        new_y = self.position[1] - camera_position[1]
         if self.is_alive:
             if not self.looking_left:
-                surface.blit(self.image, self.position)
+                surface.blit(self.image, [new_x, new_y])
             else:
                 image = pg.transform.flip(self.image, True, False)
-                surface.blit(image, self.position)
+                surface.blit(image, [new_x, new_y])
 
         self.return_to_idle()
 

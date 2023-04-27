@@ -14,9 +14,7 @@ class Player(Creature):
     def game_states(self):
         if self.health_points != 0:
             if self.position[0] >= WIN_POSITION[0]:
-                self.position[0] = START_POSITION_X
-                self.health_points = 3
-                return "menu"
+                pass
             else:
                 return "game"
         elif self.health_points == 0:

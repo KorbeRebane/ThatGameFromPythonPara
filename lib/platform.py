@@ -6,14 +6,16 @@ from lib.utilities import scale_image
 
 
 class Platform:
-    def __init__(self, platform_position, texture):
+    def __init__(self, position, texture):
         self.platform_image = pg.image.load(texture)
         self.platform_image = scale_image(self.platform_image, SCALE)
 
-        self.platform_position = platform_position
+        self.platform_position = position
 
-    def draw(self, surface):
-        surface.blit(self.platform_image, self.platform_position)
+    def draw(self, surface, camera_position):
+        new_x = self.platform_position[0] - camera_position[0]
+        new_y = self.platform_position[1] - camera_position[1]
+        surface.blit(self.platform_image, [new_x, new_y])
 
     @property
     def rect(self):
