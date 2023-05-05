@@ -14,12 +14,13 @@ class GameManager:
     def __init__(self, sound_manager):
         self.sound_manager = sound_manager
         self.player = Player()
-        self.platforms = [Platform(FLOOR_POSITION, FLOOR_FILENAME), Platform(SECOND_PLATFORM_POSITION, PLATFORM_FILENAME)]
-                        # Platform(THIRD_PLATFORM_POSITION, PLATFORM_FILENAME), Platform(FOURTH_PLATFORM_POSITION, PLATFORM_FILENAME)]
+        self.platforms = [Platform(FLOOR_POSITION, FLOOR_FILENAME),
+                         Platform(THIRD_PLATFORM_POSITION, PLATFORM_FILENAME), Platform(FOURTH_PLATFORM_POSITION, PLATFORM_FILENAME)]
         self.background = Background()
         self.interface = GameScreen()
         self.enemies = [Enemy(FIRST_ENEMY_POSITION)]
         self.platforms_rects = []
+        self.enemies_rects = []
         self.camera = Camera()
 
         sound_manager.play_music("back_music")
@@ -34,13 +35,15 @@ class GameManager:
             platform.draw(surface, self.camera.position)
 
     def update(self, pressed_keys, upped_keys, mouse_pressed, mouse_upped):
-        for platform in self.platforms:
-            self.platforms_rects.append(platform.rect)
-        self.player.move(pressed_keys, upped_keys, self.platforms_rects)
+        self.platforms_rects = [p.rect for p in self.platforms]
+        self.player.move(pressed_keys, upped_keys, self.platforms_rects + self.enemies_rects)
         self.player.attack(mouse_pressed)
         for enemy in self.enemies:
+            self.enemies_rects = [e.rect for e in self.enemies if e.is_alive]
             if self.player.is_attacking:
                 enemy.get_damage(self.player.rect)
+            self.platforms_rects.append(self.player.rect)
+            enemy.move(self.platforms_rects, self.player)
         new_state = self.player.game_states()
         # Camera movement
         if self.camera.position[0] <= self.player.position[0] - BORDER_XR:
