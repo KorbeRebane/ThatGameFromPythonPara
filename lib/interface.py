@@ -14,3 +14,8 @@ class GameScreen:
         for i in range(health_points_count):
             surface.blit(self.health_points_image, [HEALTH_POINT_POSITION_X + 2*i*HEALTH_POINT_SIZE,
                                                     HEALTH_POINT_POSITION_Y])
+
+    def draw_health_points_enemy(self, surface, health_points_count_enemy):
+        for i in range(health_points_count_enemy):
+            surface.blit(self.health_points_image, [500 * SCALE + 2*i*HEALTH_POINT_SIZE,
+                                                    HEALTH_POINT_POSITION_Y])
