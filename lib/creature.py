@@ -80,7 +80,7 @@ class Creature:
         self.position[0] += self.speed[0] * DELTA_T
         self.position[1] += self.speed[1] * DELTA_T
         if pg.Rect.collidelist(self.rect.move(0, 1), platform_rects) != -1:
-            self.position[1] = platform_rects[pg.Rect.collidelist(self.rect.move(0, 1), platform_rects)][1] - PLAYER_HEIGHT
+            self.position[1] = platform_rects[pg.Rect.collidelist(self.rect.move(0, 1), platform_rects)][1] - PLAYER_HEIGHT # платформа выталкивает игрока из себя
             self.speed[1] = 0
             self.jumps_count = self.NUMBER_OF_JUMPS
         else:
