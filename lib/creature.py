@@ -3,8 +3,8 @@ from copy import copy
 import pygame as pg
 from pygame import Rect
 
-from lib.constants import SCALE, PLAYER_SPEED, HEALTH_POINTS, PLAYER_DAMAGE, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
-    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS
+from lib.constants import SCALE, PLAYER_SPEED, HEALTH_POINTS, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
+    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT
 from lib.utilities import scale_image
 
 
@@ -79,12 +79,13 @@ class Creature:
 
         self.position[0] += self.speed[0] * DELTA_T
         self.position[1] += self.speed[1] * DELTA_T
-        if not pg.Rect.collidelist(self.rect.move(0, 0.1), platform_rects) == -1:
-            self.position[1] -= self.speed[1] * DELTA_T
+        if pg.Rect.collidelist(self.rect.move(0, 1), platform_rects) != -1:
+            self.position[1] = platform_rects[pg.Rect.collidelist(self.rect.move(0, 1), platform_rects)][1] - PLAYER_HEIGHT
             self.speed[1] = 0
             self.jumps_count = self.NUMBER_OF_JUMPS
         else:
             self.speed[1] += G * DELTA_T
+        print(self.speed)
 
     def get_damage(self, damage):
         # тут будут условия на получение урона
