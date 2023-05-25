@@ -1,27 +1,18 @@
+from copy import copy
+
 from lib.background import Background
 from lib.camera import Camera
-from lib.constants import FLOOR_POSITION, SECOND_PLATFORM_POSITION, THIRD_PLATFORM_POSITION, FOURTH_PLATFORM_POSITION, \
-    FIRST_ENEMY_POSITION, SECOND_ENEMY_POSITION, FLOOR_FILENAME, PLATFORM_FILENAME, BORDER_XL, \
-    BORDER_XR, BORDER_YH, BORDER_YD
-from lib.enemy import Enemy
+from lib.constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD
 from lib.interface import GameScreen
 from lib.player import Player
-from lib.platform import Platform
+from source.levels.levels import levels_dict
 
 
 class GameManager:
 
     def __init__(self, sound_manager):
         self.sound_manager = sound_manager
-        self.player = Player()
-        self.platforms = [Platform(FLOOR_POSITION, FLOOR_FILENAME),
-                         Platform(THIRD_PLATFORM_POSITION, PLATFORM_FILENAME), Platform(FOURTH_PLATFORM_POSITION, PLATFORM_FILENAME)]
-        self.background = Background()
-        self.interface = GameScreen()
-        self.enemies = [Enemy(FIRST_ENEMY_POSITION)]
-        self.platforms_rects = []
-        self.enemies_rects = []
-        self.camera = Camera()
+        self.return_to_inital_states('1')
 
         sound_manager.play_music("back_music")
 
@@ -35,16 +26,20 @@ class GameManager:
             platform.draw(surface, self.camera.position)
 
     def update(self, pressed_keys, upped_keys, mouse_pressed, mouse_upped):
-        self.platforms_rects = [p.rect for p in self.platforms]
+        new_state = 'game' # Если ничего не произошло, то мы всё ещё в игре
+        self.platforms_rects = [p.rect for p in self.platforms] # Конструктор списка
         self.player.move(pressed_keys, upped_keys, self.platforms_rects + self.enemies_rects)
         self.player.attack(mouse_pressed)
         for enemy in self.enemies:
             self.enemies_rects = [e.rect for e in self.enemies if e.is_alive]
             if self.player.is_attacking:
                 enemy.get_damage(self.player.rect)
-            self.platforms_rects.append(self.player.rect)
             enemy.move(self.platforms_rects, self.player)
-        new_state = self.player.game_states()
+        # Тот самый вин\луз в геймманагере
+        if self.platforms[len(self.platforms)-1].win(self.player.position): # Пердача последней, победной, платформе позиции игрока
+            new_state = 'menu'
+        if self.player.health_points == 0: # Если нет хп
+            new_state = 'menu'
         # Camera movement
         if self.camera.position[0] <= self.player.position[0] - BORDER_XR:
             self.camera.position[0] = self.player.position[0] - BORDER_XR
@@ -55,4 +50,18 @@ class GameManager:
             self.camera.position[1] = self.player.position[1] - BORDER_YD
         elif self.camera.position[1] >= self.player.position[1] - BORDER_YH:
             self.camera.position[1] = self.player.position[1] - BORDER_YH
-        return new_state
+
+        # if new_state == 'menu':
+        #     self.return_to_inital_states('1')
+
+        return new_state, -1
+
+    def return_to_inital_states(self, level): # возвращает в начальное состояние
+        self.player = Player()
+        self.platforms = levels_dict[f'{level}_platforms']
+        self.background = Background()
+        self.interface = GameScreen()
+        self.enemies = copy(levels_dict[f'{level}_enemies'])
+        self.platforms_rects = []
+        self.enemies_rects = []
+        self.camera = Camera()

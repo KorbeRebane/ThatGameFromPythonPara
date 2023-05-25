@@ -42,3 +42,11 @@ class Player(Creature):
             self.image = self.attack_image
             self.not_idle_counter = TIME_OF_ATTACK
             self.is_attacking = True
+
+    def on_start_conditions(self): # Возвращает игрока в изначальное состояние
+        self.position[0] = START_POSITION_X
+        self.position[1] = START_POSITION_Y
+        self.walking_left = False
+        self.walking_right = False
+        self.health_points = HEALTH_POINTS
+        self.in_jump = False

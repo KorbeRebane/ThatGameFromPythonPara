@@ -20,7 +20,7 @@ class Creature:
         self.image = self.idle_image
         self.image_rect = self.image.get_rect()
 
-        self.position = position
+        self.position = copy(position)
         self.speed = copy(PLAYER_SPEED_LIST)
         self.health_points = health_points
         self.damage = damage
@@ -80,12 +80,11 @@ class Creature:
         self.position[0] += self.speed[0] * DELTA_T
         self.position[1] += self.speed[1] * DELTA_T
         if pg.Rect.collidelist(self.rect.move(0, 1), platform_rects) != -1:
-            self.position[1] = platform_rects[pg.Rect.collidelist(self.rect.move(0, 1), platform_rects)][1] - PLAYER_HEIGHT # платформа выталкивает игрока из себя
+            self.position[1] = platform_rects[pg.Rect.collidelist(self.rect.move(0, 1), platform_rects)][1] - PLAYER_HEIGHT
             self.speed[1] = 0
             self.jumps_count = self.NUMBER_OF_JUMPS
         else:
             self.speed[1] += G * DELTA_T
-        print(self.speed)
 
     def get_damage(self, damage):
         # тут будут условия на получение урона
