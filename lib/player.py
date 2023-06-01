@@ -21,7 +21,7 @@ class Player(Creature):
             self.health_points = 3
             return "menu"
 
-    def move(self, pressed_keys, upped_keys, platform_rects):
+    def move(self, pressed_keys, upped_keys, platform_rects, can_we_move): # can_we_move - открыт ли текст
         if pg.K_d in pressed_keys or pg.K_RIGHT in pressed_keys:
             self.walking_right = True
         if pg.K_d in upped_keys or pg.K_RIGHT in upped_keys:
@@ -35,7 +35,7 @@ class Player(Creature):
         else:
             self.in_jump = False
 
-        self.move_physically(platform_rects)
+        self.move_physically(platform_rects, can_we_move)
 
     def attack(self, mouse_pressed):
         if mouse_pressed == 1:
@@ -43,10 +43,10 @@ class Player(Creature):
             self.not_idle_counter = TIME_OF_ATTACK
             self.is_attacking = True
 
-    def on_start_conditions(self): # Возвращает игрока в изначальное состояние
-        self.position[0] = START_POSITION_X
-        self.position[1] = START_POSITION_Y
-        self.walking_left = False
-        self.walking_right = False
-        self.health_points = HEALTH_POINTS
-        self.in_jump = False
+    # def on_start_conditions(self): # Возвращает игрока в изначальное состояние
+    #     self.position[0] = START_POSITION_X
+    #     self.position[1] = START_POSITION_Y
+    #     self.walking_left = False
+    #     self.walking_right = False
+    #     self.health_points = HEALTH_POINTS
+    #     self.in_jump = False

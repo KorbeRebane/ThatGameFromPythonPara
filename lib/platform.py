@@ -22,9 +22,26 @@ class Platform:
         height = self.image.get_height()
         return Rect(x, y, width, height)
 
+
+class Trigger(Platform):
+    def __init__(self, position, size, texture, number):
+        super().__init__(position, size, texture)
+        self.is_activated = False
+        self.number = number
+
+    def contact(self, player):
+        if pg.Rect.colliderect(self.rect, player.rect) and not self.is_activated: # Если мы встаём на триггер то он активируется
+            self.is_activated = True
+            return True
+
+    @property
+    def ret_number(self):
+        return self.number
+
+
 class WinPlatform(Platform):
-    def __int__(self, position, size, texture):
-        super.__init__(position, size, texture)
+    def __init__(self, position, size, texture):
+        super().__init__(position, size, texture)
 
     def win(self, player_position):
         if player_position[0] >= self.position[0]: # Если игрок дальше иксовой позиции финиша, то сработает

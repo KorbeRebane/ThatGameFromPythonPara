@@ -59,32 +59,33 @@ class Creature:
             self.speed[1] = -JUMP_SPEED
             self.jumps_count -= 1
 
-    def move_physically(self, platform_rects):
-        if self.in_jump:
-            self.jump()
+    def move_physically(self, platform_rects, can_we_move): # can_we_move - открыт ли текст
+        if not can_we_move:
+            if self.in_jump:
+                self.jump()
 
-        if self.walking_right and not self.walking_left:
-            self.speed[0] = self.MOVEMENT_SPEED
-            self.looking_left = False
-        else:
-            self.speed[0] = 0
-        if self.walking_right and pg.Rect.collidelist(self.rect.move(PLAYER_SPEED * DELTA_T, -1), platform_rects) != -1:
-            self.speed[0] = 0
+            if self.walking_right and not self.walking_left:
+                self.speed[0] = self.MOVEMENT_SPEED
+                self.looking_left = False
+            else:
+                self.speed[0] = 0
+            if self.walking_right and pg.Rect.collidelist(self.rect.move(PLAYER_SPEED * DELTA_T, -1), platform_rects) != -1:
+                self.speed[0] = 0
 
-        if self.walking_left and not self.walking_right:
-            self.speed[0] = -self.MOVEMENT_SPEED
-            self.looking_left = True
-        if self.walking_left and pg.Rect.collidelist(self.rect.move(PLAYER_SPEED * -DELTA_T, -1), platform_rects) != -1:
-            self.speed[0] = 0
+            if self.walking_left and not self.walking_right:
+                self.speed[0] = -self.MOVEMENT_SPEED
+                self.looking_left = True
+            if self.walking_left and pg.Rect.collidelist(self.rect.move(PLAYER_SPEED * -DELTA_T, -1), platform_rects) != -1:
+                self.speed[0] = 0
 
-        self.position[0] += self.speed[0] * DELTA_T
-        self.position[1] += self.speed[1] * DELTA_T
-        if pg.Rect.collidelist(self.rect.move(0, 1), platform_rects) != -1:
-            self.position[1] = platform_rects[pg.Rect.collidelist(self.rect.move(0, 1), platform_rects)][1] - PLAYER_HEIGHT
-            self.speed[1] = 0
-            self.jumps_count = self.NUMBER_OF_JUMPS
-        else:
-            self.speed[1] += G * DELTA_T
+            self.position[0] += self.speed[0] * DELTA_T
+            self.position[1] += self.speed[1] * DELTA_T
+            if pg.Rect.collidelist(self.rect.move(0, 1), platform_rects) != -1:
+                self.position[1] = platform_rects[pg.Rect.collidelist(self.rect.move(0, 1), platform_rects)][1] - PLAYER_HEIGHT
+                self.speed[1] = 0
+                self.jumps_count = self.NUMBER_OF_JUMPS
+            else:
+                self.speed[1] += G * DELTA_T
 
     def get_damage(self, damage):
         # тут будут условия на получение урона

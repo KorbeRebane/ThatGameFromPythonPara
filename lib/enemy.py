@@ -19,7 +19,7 @@ class Enemy(Creature):
         if self.health_points == 0:
             self.is_alive = False
 
-    def move(self, platform_rects, player):
+    def move(self, platform_rects, player, can_we_move): # can_we_move - открыт ли текст
         if player.view_zone.colliderect(self.rect) and self.position[0] >= player.position[0]:
             self.walking_left = True
         else:
@@ -33,4 +33,4 @@ class Enemy(Creature):
             # И спустя 20 тиков предположительно враг врезался бы в платформу И игрок в определённом диапазоне высоты
             self.jump()
 
-        self.move_physically(platform_rects + [player.rect])
+        self.move_physically(platform_rects + [player.rect], can_we_move)
