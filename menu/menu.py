@@ -2,6 +2,9 @@ import sys
 
 import pygame as pg
 
+from lib.constants import BUTTON_NEW_GAME_SIZE_WIDTH, SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT, BUTTON_NEW_GAME_POSITION_Y, \
+    BUTTON_NEW_GAME_POSITION_X, BUTTON_EXIT_SIZE_WIDTH, BUTTON_EXIT_POSITION_X, BUTTON_EXIT_POSITION_Y, \
+    BUTTON_EXIT_SIZE_HEIGHT
 from menu.button import Button
 
 
@@ -10,15 +13,20 @@ class MenuManager:
     def __init__(self):
         self.game_starts = False
 
+        # Список нажатых кнопок
         self.buttons = []
-        button_new_game = Button(size=(200, 50),
-                                 position=(200, 400),
+
+        # Кнопка новой игры
+        button_new_game = Button(size=(BUTTON_NEW_GAME_SIZE_WIDTH * SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT * SCALE),
+                                 position=(BUTTON_NEW_GAME_POSITION_X * SCALE, BUTTON_NEW_GAME_POSITION_Y * SCALE),
                                  text="Новая игра",
                                  color="white",
                                  on_click=self.new_game)
         self.buttons.append(button_new_game)
-        button_exit = Button(size=(200, 50),
-                             position=(200, 600),
+
+        # Кнопка выхода
+        button_exit = Button(size=(BUTTON_EXIT_SIZE_WIDTH * SCALE, BUTTON_EXIT_SIZE_HEIGHT * SCALE),
+                             position=(BUTTON_EXIT_POSITION_X * SCALE, BUTTON_EXIT_POSITION_Y * SCALE),
                              text="Выход",
                              color="white",
                              on_click=self.exit)
@@ -43,7 +51,7 @@ class MenuManager:
         return "menu"
 
     def draw(self, surface):
-        surface.fill((100, 0, 0))
+        surface.fill((0, 0, 0))
         for button in self.buttons:
             button.draw(surface)
 
@@ -53,4 +61,3 @@ class MenuManager:
     def exit(self):
         pg.quit()
         sys.exit()
-

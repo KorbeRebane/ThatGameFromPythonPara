@@ -23,6 +23,7 @@ class GameManager:
         self.interface = GameScreen()
         self.enemies = [Enemy(FIRST_ENEMY_POSITION)]
         self.platforms_rects = []
+        self.enemies_rects = []
         self.camera = Camera()
 
         sound_manager.play_music("back_music")

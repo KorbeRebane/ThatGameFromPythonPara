@@ -14,7 +14,7 @@ class Button:
 
         self.image = pg.surface.Surface(self.size)
         self.image.fill(self.color)
-        self.image.blit(self.text_image, (0, 0))
+        self.image.blit(self.text_image, (5, 5))
 
         self.on_click_function = on_click
 
