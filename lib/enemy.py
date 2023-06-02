@@ -5,6 +5,7 @@ from lib.constants import ENEMY_FILENAME, SCALE, HEALTH_POINTS_ENEMY, ENEMY_DAMA
 from lib.creature import Creature
 from lib.utilities import scale_image
 
+
 class Enemy(Creature):
     def __init__(self, position):
         super().__init__(ENEMY_FILENAME, ENEMY_FILENAME, position, HEALTH_POINTS, ENEMY_DAMAGE)
