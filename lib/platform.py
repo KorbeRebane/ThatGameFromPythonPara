@@ -1,5 +1,6 @@
 import pygame as pg
 from pygame import Rect
+# from enemy import Enemy
 
 class Platform:
     def __init__(self, position, size, texture):
@@ -24,15 +25,19 @@ class Platform:
 
 
 class Trigger(Platform):
-    def __init__(self, position, size, texture, number):
+    def __init__(self, position, size, texture, number=None):
         super().__init__(position, size, texture)
         self.is_activated = False
         self.number = number
 
     def contact(self, player):
-        if pg.Rect.colliderect(self.rect, player.rect) and not self.is_activated: # Если мы встаём на триггер то он активируется
+        if pg.Rect.colliderect(self.rect, player.rect) and not self.is_activated and self.number is not None: # Если мы встаём на триггер то он активируется
             self.is_activated = True
             return True
+
+    def contact_enemy(self, enemy):
+        if pg.Rect.colliderect(self.rect, enemy.rect):
+            enemy.walking_left, enemy.walking_right = enemy.walking_right, enemy.walking_left
 
     @property
     def ret_number(self):
@@ -46,3 +51,4 @@ class WinPlatform(Platform):
     def win(self, player_position):
         if player_position[0] >= self.position[0]: # Если игрок дальше иксовой позиции финиша, то сработает
             return True
+

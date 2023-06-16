@@ -4,7 +4,6 @@ import random
 from lib.constants import ENEMY_FILENAME, HEALTH_POINTS_ENEMY, ENEMY_DAMAGE, HEALTH_POINTS, PLAYER_SPEED, \
     DELTA_T, PLATFORM_HEIGHT, PLAYER_DAMAGE
 from lib.creature import Creature
-# from lib.index import Index
 
 
 class Enemy(Creature):
@@ -39,6 +38,7 @@ class Enemy(Creature):
                 elif random_index == 2:
                     self.walking_right = True
                     self.walking_left = False
+
 
         if player.view_zone.colliderect(self.rect) and pg.Rect.collidelist(self.view_zone.move(PLAYER_SPEED * -DELTA_T, -1), platform_rects) != -1 \
         and ((player.position[1] + PLATFORM_HEIGHT) > self.position[1] > player.position[1]): # если игрок в поле зрения И

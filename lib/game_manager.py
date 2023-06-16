@@ -5,6 +5,7 @@ from lib.camera import Camera
 from lib.constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD
 from lib.interface import GameScreen
 from lib.player import Player
+from lib.enemy import Enemy
 from lib.text_engine import TextSurface
 from source.levels.levels import levels_dict
 
@@ -40,8 +41,12 @@ class GameManager:
                 enemy.get_damage(self.player.rect)
             enemy.move(self.platforms_rects, self.player, can_we_move=self.text_surface.is_text_open) # can_we_move - открыт ли текст
 
+            for trigger in self.triggers:  # если мы контактируем с триггером, то враг разворачивается
+                trigger.contact_enemy(enemy)
+
+
         # Тот самый вин\луз в геймманагере
-        if self.platforms[len(self.platforms)-1].win(self.player.position): # Пердача последней, победной, платформе позиции игрока
+        if self.platforms[-1].win(self.player.position): # Пердача последней, победной, платформе позиции игрока
             new_state = 'menu'
         if self.player.health_points == 0: # Если нет хп
             new_state = 'menu'

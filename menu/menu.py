@@ -72,7 +72,7 @@ class LevelListManager:
         self.buttons = []
 
         # Кнопка 0 уровня
-        button_zero_level = Button(size=(BUTTON_NEW_GAME_SIZE_WIDTH * SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT * SCALE),
+        button_zero_level = Button(size=(BUTTON_NEW_GAME_SIZE_WIDTH * 2 * SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT * SCALE),
                                  position=((BUTTON_NEW_GAME_POSITION_X-300) * SCALE, (BUTTON_NEW_GAME_POSITION_Y-200) * SCALE),
                                  text="Тестовый уровень",
                                  color="white",
@@ -80,7 +80,7 @@ class LevelListManager:
         self.buttons.append(button_zero_level)
 
         # Кнопка 1 уровня
-        button_first_level = Button(size=(BUTTON_NEW_GAME_SIZE_WIDTH * SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT * SCALE),
+        button_first_level = Button(size=(BUTTON_NEW_GAME_SIZE_WIDTH * 2 * SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT * SCALE),
                                    position=((BUTTON_NEW_GAME_POSITION_X - 300) * SCALE,
                                              (BUTTON_NEW_GAME_POSITION_Y - 100) * SCALE),
                                    text="Первый уровень",
@@ -88,9 +88,27 @@ class LevelListManager:
                                    on_click=lambda : self.startt_level(2))
         self.buttons.append(button_first_level)
 
+        # Кнопка 2 уровня
+        button_second_level = Button(size=(BUTTON_NEW_GAME_SIZE_WIDTH * 2 * SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT * SCALE),
+                                   position=((BUTTON_NEW_GAME_POSITION_X - 300) * SCALE,
+                                             (BUTTON_NEW_GAME_POSITION_Y - 0) * SCALE),
+                                   text="Второй уровень",
+                                   color="white",
+                                   on_click=lambda : self.startt_level(3))
+        self.buttons.append(button_second_level)
+
+        # Кнопка 3 уровня
+        button_third_level = Button(size=(BUTTON_NEW_GAME_SIZE_WIDTH * 2 * SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT * SCALE),
+                                   position=((BUTTON_NEW_GAME_POSITION_X - 300) * SCALE,
+                                             (BUTTON_NEW_GAME_POSITION_Y + 100) * SCALE),
+                                   text="Третий уровень",
+                                   color="white",
+                                   on_click=lambda : self.startt_level(4))
+        self.buttons.append(button_third_level)
+
         # Кнопка возврата в меню
-        to_menu_button = Button(size=(BUTTON_EXIT_SIZE_WIDTH * SCALE, BUTTON_EXIT_SIZE_HEIGHT * SCALE),
-                             position=((BUTTON_EXIT_POSITION_X-300) * SCALE, (BUTTON_EXIT_POSITION_Y+100) * SCALE),
+        to_menu_button = Button(size=(BUTTON_EXIT_SIZE_WIDTH * 2 * SCALE, BUTTON_EXIT_SIZE_HEIGHT * SCALE),
+                             position=((BUTTON_EXIT_POSITION_X - 300) * SCALE, (BUTTON_EXIT_POSITION_Y + 100) * SCALE),
                              text="В меню",
                              color="white",
                              on_click=self.to_menu)
