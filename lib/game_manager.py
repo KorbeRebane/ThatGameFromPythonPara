@@ -2,7 +2,6 @@ from copy import copy
 
 from lib.background import Background
 from lib.camera import Camera
-from lib.constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD
 from lib.interface import GameScreen
 from lib.player import Player
 from lib.text_engine import TextSurface
@@ -50,18 +49,11 @@ class GameManager:
             if trigger.contact(self.player):
                 self.text_surface.put_text(trigger.number)
 
-        self.text_surface.continue_text(mouse_pressed)
+        if self.text_surface.is_text_open:
+            self.text_surface.continue_text(mouse_pressed)
 
-        # Camera movement, КОСТЫЛЬ
-        if self.camera.position[0] <= self.player.position[0] - BORDER_XR:
-            self.camera.position[0] = self.player.position[0] - BORDER_XR
-        if self.camera.position[0] >= self.player.position[0] - BORDER_XL:
-            self.camera.position[0] = self.player.position[0] - BORDER_XL
-
-        if self.camera.position[1] <= self.player.position[1] - BORDER_YD:
-            self.camera.position[1] = self.player.position[1] - BORDER_YD
-        elif self.camera.position[1] >= self.player.position[1] - BORDER_YH:
-            self.camera.position[1] = self.player.position[1] - BORDER_YH
+        # Camera movement,
+        self.camera.camera_movement(self.player)
 
         return new_state, -1
 
