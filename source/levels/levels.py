@@ -28,7 +28,7 @@ first_level_platfroms_list = [Platform(FLOOR_POSITION, FLOOR_SIZE, FLOOR_FILENAM
                               WinPlatform(WIN_POSITION, WIN_SIZE, PLATFORM_FILENAME)
                               ]
 first_level_enemy_list = []
-first_level_text_dict = {0: 'Автор: Первая строчка', 1: 'Автор: Хм-м, что это'}
+first_level_text_dict = {0: ['Автор: Первая строчка', 'Автор: Вторая строчка', 'Автор: Третья строчка'], 1: ['Автор: Хм-м, что это', 'Автор: Интересный стол']}
 first_level_trigger_list = [Trigger([START_POSITION_X, START_POSITION_Y], (100, 100), PLATFORM_FILENAME, 0),
                             Trigger([5000, START_POSITION_Y], (100, 100), PLATFORM_FILENAME, 1)
                             ]
