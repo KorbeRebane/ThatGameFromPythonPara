@@ -1,72 +1,85 @@
-from turtle import position
-
 import pygame as pg
-from pygame import Rect
+import random
 
-from lib.constants import ENEMY_FILENAME, SCALE, HEALTH_POINTS_ENEMY, ENEMY_DAMAGE, HEALTH_POINTS, \
-    PLAYER_ATTACK_FILENAME, POWER_OF_ATTACK
+from lib.constants import ENEMY_FILENAME, HEALTH_POINTS_ENEMY, ENEMY_DAMAGE, HEALTH_POINTS, PLAYER_SPEED, \
+    DELTA_T, PLATFORM_HEIGHT, PLAYER_DAMAGE, TIME_OF_ATTACK, ENEMY_ATTACK_FILENAME, SPEED_OF_ATTACK_ENEMY
 from lib.creature import Creature
-from lib.utilities import scale_image
+import time
+# from lib.index import Index
+
 
 class Enemy(Creature):
-    def __init__(self, enemy_position):
-        super().__init__(ENEMY_FILENAME, PLAYER_ATTACK_FILENAME, position, HEALTH_POINTS, ENEMY_DAMAGE)
-        self.position = enemy_position
-        self.enemy_image = pg.image.load(ENEMY_FILENAME)
-        self.enemy_image = scale_image(self.enemy_image, SCALE)
-        self.enemy_image_rect = self.enemy_image.get_rect()
+    MOVEMENT_SPEED = PLAYER_SPEED*0.5
+    NUMBER_OF_JUMPS = 0
 
-        self.health_points = HEALTH_POINTS_ENEMY
-        self.position = enemy_position
-        self.damage = ENEMY_DAMAGE
-        self.is_alive = True
-
-    def get_damage(self, player_rect):
-        # условия на получение урона
-        if player_rect.colliderect(self.rect):
-            self.health_points -= POWER_OF_ATTACK
-
-        # смерть
-        if self.health_points <= 0:
-            self.is_alive = False
+    def __init__(self, position):
+        super().__init__(ENEMY_FILENAME, ENEMY_ATTACK_FILENAME, position, HEALTH_POINTS_ENEMY, ENEMY_DAMAGE)
+        self.attack_timer = 0
+        self.attack_frame_counter = 0
 
 
 
-# class Enemyy:
-#     def __init__(self, enemy_position):
-#         self.enemy_image = pg.image.load(ENEMY_FILENAME)
-#         self.enemy_image = scale_image(self.enemy_image, SCALE)
-#         self.enemy_image_rect = self.enemy_image.get_rect()
-#
-#         self.health_points = HEALTH_POINTS_ENEMY
-#         self.position = enemy_position
-#         self.damage = ENEMY_DAMAGE
-#         self.is_alive = True
+    def move(self, platform_rects, player, can_we_move): # can_we_move - открыт ли текст
+        if player.view_zone.colliderect(self.rect):
+            if self.position[0] >= player.position[0]:
+                self.walking_left = True
+                self.walking_right = False
+            elif self.position[0] <= player.position[0]:
+                self.walking_right = True
+                self.walking_left = False
+        if not player.view_zone.colliderect(self.rect):
+            if self.speed[0] == 0:
+                random_index = random.choice([1, 2])
+                if random_index == 1:
+                    self.walking_left = True
+                    self.walking_right = False
+                elif random_index == 2:
+                    self.walking_right = True
+                    self.walking_left = False
 
-    def draw(self, surface):
-        if self.is_alive:
-            surface.blit(self.enemy_image, self.position)
+        if player.view_zone.colliderect(self.rect) and pg.Rect.collidelist(self.view_zone.move(PLAYER_SPEED * -DELTA_T, -1), platform_rects) != -1 \
+        and ((player.position[1] + PLATFORM_HEIGHT) > self.position[1] > player.position[1]): # если игрок в поле зрения И
+            # И спустя 20 тиков предположительно враг врезался бы в платформу И игрок в определённом диапазоне высоты
+            self.jump()
 
-    def give_damage(self):
-        # тут будут условия на нанесение урона
-        return self.damage
+        self.move_physically(platform_rects + [player.rect], can_we_move)
 
-    # def get_damage(self, player_rect):
-    #     # тут будут условия на получение урона
-    #     if player_rect.colliderect(self.rect):
-    #         self.health_points -= 1
-    #     # dying
-    #     if self.health_points == 0:
-    #         self.is_alive = False
+    # def enemy_attack(self, enemy_rect_in_attack, rect_player_in_idle):
+    #     if enemy_rect_in_attack.colliderect(rect_player_in_idle) and not self.is_damage_applied:
+    #         self.image = self.attack_image
+    #         # self.not_idle_counter = TIME_OF_ATTACK
+    #         self.is_attacking = True
+    #         self.is_damage_applied = True
+    #     elif not enemy_rect_in_attack.colliderect(rect_player_in_idle):
+    #         self.is_damage_applied = False
 
-    # def dying(self):
-    #     if self.health_points == 0:
-    #         self.is_alive = False
+    # def enemy_attack(self, enemy_rect_in_attack, rect_player_in_idle):
+    #     if enemy_rect_in_attack.colliderect(rect_player_in_idle) and not self.is_damage_applied:
+    #         self.image = self.attack_image
+    #         self.is_attacking = True
+    #         self.is_damage_applied = True
+    #     elif not enemy_rect_in_attack.colliderect(rect_player_in_idle):
+    #         self.is_damage_applied = False
 
-    @property
-    def rect(self):
-        x = self.position[0]
-        y = self.position[1]
-        width = self.enemy_image.get_width()
-        height = self.enemy_image.get_height()
-        return Rect(x, y, width, height)
+    def enemy_attack(self, enemy_rect_in_attack, rect_player_in_idle):
+        if enemy_rect_in_attack.colliderect(rect_player_in_idle) and not self.is_damage_applied:
+            self.image = self.attack_image
+            if self.attack_timer == 0:
+                self.is_attacking = True
+                self.attack_timer = SPEED_OF_ATTACK_ENEMY  # Устанавливаем таймер на заданное количество кадров
+                self.attack_frame_counter = 0  # Сбрасываем счетчик кадров
+        else:
+            self.is_damage_applied = False
+
+
+    def get_damage_from_player(self, player, damage): #self = enemy
+        if player.is_attacking and player.rect_for_fight.colliderect(self.rect):
+            self.health_points -= damage
+
+
+        # def get_damage(self, player_rect, damage):
+    #     if player_rect.colliderect(self.rect): #Если то, что ввели, пересекается с (тем, к чему применяем +
+    #         # расстояния из rect_for_enemy)
+    #         self.health_points -= damage #У того, к чему применяем, вычесть дамаг
+
+

@@ -20,8 +20,6 @@ def get_all_pressed_keys():
             upped_keys.append(event.key)
         if event.type == pg.MOUSEBUTTONDOWN:
             pressed_mouse = event.button
-        # if event.type == pg.MOUSEBUTTONUP:
-        #     upped_mouse = event.button
         if event.type == pg.QUIT:
             need_to_exit = True
         if need_to_exit:
@@ -31,7 +29,6 @@ def get_all_pressed_keys():
     return pressed_keys, upped_keys, pressed_mouse, upped_mouse
 
 
-#Коэффициент размера
 def scale_image(image, scale):
     width = image.get_width()
     height = image.get_height()

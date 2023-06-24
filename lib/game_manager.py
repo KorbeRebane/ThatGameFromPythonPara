@@ -1,49 +1,123 @@
+from copy import copy
+
+from pygame import draw, Rect
+
 from lib.background import Background
-from lib.constants import FLOOR_POSITION, SECOND_PLATFORM_POSITION, THIRD_PLATFORM_POSITION, FOURTH_PLATFORM_POSITION, \
-    FIRST_ENEMY_POSITION, SECOND_ENEMY_POSITION, FLOOR_FILENAME, PLATFORM_FILENAME
-from lib.enemy import Enemy
+from lib.camera import Camera
+from lib.constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD, ENEMY_DAMAGE, PLAYER_DAMAGE, \
+    HEALTH_POINT_POSITION_X_PLAYER, HEALTH_POINT_POSITION_Y_PLAYER, ENEMY_WIDTH, HEALTH_POINTS_ENEMY, GREEN, RED, BLACK, \
+    HEALTH_POINTS, PLAYER_WIDTH, SPEED_OF_ATTACK_ENEMY, SCALE
 from lib.interface import GameScreen
 from lib.player import Player
-    # Playerr
-from lib.platform import Platform
+from lib.text_engine import TextSurface
+from source.levels.levels import levels_dict
 
 
 class GameManager:
 
     def __init__(self, sound_manager):
         self.sound_manager = sound_manager
-        self.player = Player()
-        self.platforms = [Platform(FLOOR_POSITION, FLOOR_FILENAME), Platform(SECOND_PLATFORM_POSITION, PLATFORM_FILENAME)]
-                        # Platform(THIRD_PLATFORM_POSITION, PLATFORM_FILENAME), Platform(FOURTH_PLATFORM_POSITION, PLATFORM_FILENAME)]
-        self.background = Background()
-        self.interface = GameScreen()
-        self.enemies = [Enemy(FIRST_ENEMY_POSITION)]
-        self.platforms_rects = []
-        self.enemies_rects =[]
+        self.return_to_inital_states('1')
+
+        sound_manager.play_music("back_music")
 
 
-        # sound_manager.play_music("back_music")
-
-    # Рисуем здоровье player`a и врага
     def draw(self, surface):
         self.background.draw_game_window(surface)
-        self.player.draw(surface)
-        self.interface.draw_health_points(surface, health_points_count=self.player.get_health_points)
+        self.player.draw(surface, self.camera.position)
+        # self.interface.draw_health_points(surface, HEALTH_POINTS, self.player.position[0] - self.camera.position[0], self.player.position[1] - self.camera.position[1] - 10 - 15)
+
+
 
         for enemy in self.enemies:
-            enemy.draw(surface)
-            self.interface.draw_health_points_enemy(surface, health_points_count_enemy= +\
-                enemy.get_health_points)
+            if enemy.health_points > 0:
+                enemy.draw(surface, self.camera.position)
+                health_pos_x = enemy.position[0] - self.camera.position[0]
+                health_pos_y = enemy.position[1] - self.camera.position[1] - 25
+                health_width = ENEMY_WIDTH  # Ширина картинки врага
+                health_height = 15 * SCALE  # Высота полоски здоровья
+                health_ratio = enemy.health_points / HEALTH_POINTS_ENEMY  # Отношение текущего здоровья к максимальному
+                health_bar_width = int(health_width * health_ratio)
+                health_bar_rect = Rect(health_pos_x, health_pos_y, health_bar_width, health_height)
+                draw.rect(surface, RED, health_bar_rect)  # Рисуем полоску здоровья
+                draw.rect(surface, BLACK, health_bar_rect, 2)  # Рисуем обводку полоски здоровья
+
+
+        if self.player.health_points > 0:
+            self.player.draw(surface, self.camera.position)
+            health_pos_x = self.player.position[0] - self.camera.position[0]
+            health_pos_y = self.player.position[1] - self.camera.position[1] - 25
+            health_width = PLAYER_WIDTH  # Ширина картинки игрока
+            health_height = 15 * SCALE # Высота полоски здоровья
+            health_ratio = self.player.health_points / HEALTH_POINTS  # Отношение текущего здоровья к максимальному
+            health_bar_width = int(health_width * health_ratio)
+            health_bar_rect = Rect(health_pos_x, health_pos_y, health_bar_width, health_height)
+            draw.rect(surface, RED, health_bar_rect)  # Рисуем полоску здоровья
+            draw.rect(surface, BLACK, health_bar_rect, 2)  # Рисуем обводку полоски здоровья
+
         for platform in self.platforms:
-            platform.draw(surface)
+            platform.draw(surface, self.camera.position)
+        self.text_surface.draw(surface)
 
     def update(self, pressed_keys, upped_keys, mouse_pressed, mouse_upped):
-        self.platforms_rects = [p.rect for p in self.platforms]
-        self.player.move(pressed_keys, upped_keys, self.platforms_rects + self.enemies_rects)
-        self.player.attack(mouse_pressed)
+        new_state = 'game' # Если ничего не произошло, то мы всё ещё в игре
+        self.platforms_rects = [p.rect for p in self.platforms] # Конструктор списка
+
+        self.player.move(pressed_keys, upped_keys, self.platforms_rects + self.enemies_rects, can_we_move=self.text_surface.is_text_open) # can_we_move - открыт ли текст
+        self.player.player_attack(mouse_pressed)
+
         for enemy in self.enemies:
-            self.enemies_rects = [e.rect for e in self.enemies if e.is_alive]
-            if self.player.is_attacking:
-                enemy.get_damage(self.player.rect)
-        new_state = self.player.game_states()
-        return new_state
+            if enemy.health_points >= 0:
+                enemy.enemy_attack(enemy.rect_for_fight, self.player.rect)
+                self.enemies_rects = [e.rect for e in self.enemies if e.health_points > 0] # через врагов нельзя ходить
+
+                if enemy.attack_timer > 0:
+                    enemy.attack_timer -= 1
+                    enemy.attack_frame_counter += 1
+
+                    if enemy.attack_frame_counter >= SPEED_OF_ATTACK_ENEMY:
+                        enemy.attack_frame_counter = 0
+
+
+                if self.player.is_attacking:
+                    enemy.get_damage_from_player(self.player, damage=PLAYER_DAMAGE)
+                enemy.move(self.platforms_rects, self.player, can_we_move=self.text_surface.is_text_open) # can_we_move - открыт ли текст
+                if enemy.is_attacking:
+                    self.player.get_damage_from_enemy(enemy, enemy.rect_for_fight, damage=ENEMY_DAMAGE)
+
+        # Тот самый вин\луз в геймманагере
+        if self.platforms[len(self.platforms)-1].win(self.player.position): # Пердача последней, победной, платформе позиции игрока
+            new_state = 'menu'
+        if self.player.health_points == 0: # Если нет хп
+            new_state = 'menu'
+
+        for trigger in self.triggers: # если мы контактируем с триггером, то вызывается определённый текст. КОСТЫЛЬ
+            if trigger.contact(self.player):
+                self.text_surface.put_text(trigger.number)
+
+        self.text_surface.continue_text(mouse_pressed)
+
+        # Camera movement, КОСТЫЛЬ
+        if self.camera.position[0] <= self.player.position[0] - BORDER_XR:
+            self.camera.position[0] = self.player.position[0] - BORDER_XR
+        if self.camera.position[0] >= self.player.position[0] - BORDER_XL:
+            self.camera.position[0] = self.player.position[0] - BORDER_XL
+
+        if self.camera.position[1] <= self.player.position[1] - BORDER_YD:
+            self.camera.position[1] = self.player.position[1] - BORDER_YD
+        elif self.camera.position[1] >= self.player.position[1] - BORDER_YH:
+            self.camera.position[1] = self.player.position[1] - BORDER_YH
+
+        return new_state, -1
+
+    def return_to_inital_states(self, level): # возвращает в начальное состояние
+        self.player = Player()
+        self.platforms = levels_dict[f'{level}_platforms']
+        self.background = Background()
+        self.interface = GameScreen()
+        self.enemies = copy(levels_dict[f'{level}_enemies'])
+        self.platforms_rects = []
+        self.enemies_rects = []
+        self.camera = Camera()
+        self.text_surface = TextSurface(levels_dict[f'{level}_text'])
+        self.triggers = levels_dict[f'{level}_triggers']
