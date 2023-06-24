@@ -62,14 +62,15 @@ class Enemy(Creature):
     #         self.is_damage_applied = False
 
     def enemy_attack(self, enemy_rect_in_attack, rect_player_in_idle):
-        if enemy_rect_in_attack.colliderect(rect_player_in_idle) and not self.is_damage_applied:
-            self.image = self.attack_image
+        if enemy_rect_in_attack.colliderect(rect_player_in_idle):
             if self.attack_timer == 0:
+                self.image = self.attack_image
                 self.is_attacking = True
                 self.attack_timer = SPEED_OF_ATTACK_ENEMY  # Устанавливаем таймер на заданное количество кадров
                 self.attack_frame_counter = 0  # Сбрасываем счетчик кадров
-        else:
-            self.is_damage_applied = False
+            else:
+                self.is_attacking = False
+                
 
 
     def get_damage_from_player(self, player, damage): #self = enemy
