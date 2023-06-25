@@ -4,15 +4,16 @@ import pygame as pg
 from pygame import Rect, draw
 
 
-from lib.constants import SCALE, PLAYER_SPEED, HEALTH_POINTS, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
-    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT, RADIUS_OF_ATTACK, RED, BLACK
+from lib.constants import SCALE, PLAYER_SPEED, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
+    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT, NUMBER_OF_JUMPS, \
+    RADIUS_OF_ATTACK
 from lib.utilities import scale_image
-from lib.camera import Camera
+
 
 
 class Creature:
     MOVEMENT_SPEED = GENERAL_MOVEMENT_SPEED
-    NUMBER_OF_JUMPS = 1
+    number_of_jumps = NUMBER_OF_JUMPS - 1
 
     def __init__(self, image, attack_image, position, health_points, damage):
         self.attack_image = pg.image.load(attack_image)
@@ -86,7 +87,7 @@ class Creature:
             if pg.Rect.collidelist(self.rect.move(0, 1), platform_rects) != -1:
                 self.position[1] = platform_rects[pg.Rect.collidelist(self.rect.move(0, 1), platform_rects)][1] - PLAYER_HEIGHT
                 self.speed[1] = 0
-                self.jumps_count = self.NUMBER_OF_JUMPS
+                self.jumps_count = self.number_of_jumps
             else:
                 self.speed[1] += G * DELTA_T
 
@@ -118,7 +119,7 @@ class Creature:
         x = self.position[0] - RADIUS_OF_ATTACK
         # x = self.position[0]
         y = self.position[1]
-        width = self.image.get_width() + 100
+        width = self.image.get_width() + RADIUS_OF_ATTACK
         # width = self.image.get_width()
         height = self.image.get_height()
         return Rect(x, y, width, height)

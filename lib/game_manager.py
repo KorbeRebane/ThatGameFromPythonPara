@@ -5,7 +5,7 @@ from pygame import draw, Rect
 from lib.background import Background
 from lib.camera import Camera
 from lib.constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD, ENEMY_DAMAGE, PLAYER_DAMAGE, \
-    HEALTH_POINT_POSITION_X_PLAYER, HEALTH_POINT_POSITION_Y_PLAYER, ENEMY_WIDTH, HEALTH_POINTS_ENEMY, GREEN, RED, BLACK, \
+    ENEMY_WIDTH, HEALTH_POINTS_ENEMY, GREEN, RED, BLACK, \
     HEALTH_POINTS, PLAYER_WIDTH, SPEED_OF_ATTACK_ENEMY, SCALE
 from lib.interface import GameScreen
 from lib.player import Player
@@ -25,10 +25,6 @@ class GameManager:
     def draw(self, surface):
         self.background.draw_game_window(surface)
         self.player.draw(surface, self.camera.position)
-        # self.interface.draw_health_points(surface, HEALTH_POINTS, self.player.position[0] - self.camera.position[0], self.player.position[1] - self.camera.position[1] - 10 - 15)
-
-
-
         for enemy in self.enemies:
             if enemy.health_points > 0:
                 enemy.draw(surface, self.camera.position)
@@ -41,7 +37,6 @@ class GameManager:
                 health_bar_rect = Rect(health_pos_x, health_pos_y, health_bar_width, health_height)
                 draw.rect(surface, RED, health_bar_rect)  # Рисуем полоску здоровья
                 draw.rect(surface, BLACK, health_bar_rect, 2)  # Рисуем обводку полоски здоровья
-
 
         if self.player.health_points > 0:
             self.player.draw(surface, self.camera.position)
