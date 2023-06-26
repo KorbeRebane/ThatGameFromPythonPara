@@ -4,7 +4,7 @@ import pygame as pg
 from pygame import Rect
 
 from lib.constants import SCALE, PLAYER_SPEED, HEALTH_POINTS, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
-    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT
+    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT, RADIUS_OF_ATTACK_BACK, RADIUS_OF_ATTACK_FORWARD
 from lib.utilities import scale_image
 
 
@@ -114,3 +114,14 @@ class Creature:
         width = self.image.get_width() + 2*VIEW_RADIUS # один ВИЕВ_РАДИУС в одну сторону и один в другую
         height = self.image.get_height() + VIEW_RADIUS
         return Rect(x, y, width, height)
+
+    @property
+    def rect_for_fight(self):  # Радиус, когда враг начинает на носить урон
+        x = self.position[0] - RADIUS_OF_ATTACK_BACK
+        # x = self.position[0]
+        y = self.position[1]
+        width = self.image.get_width() + RADIUS_OF_ATTACK_FORWARD
+        # width = self.image.get_width()
+        height = self.image.get_height()
+        return Rect(x, y, width, height)
+

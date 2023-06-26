@@ -9,7 +9,7 @@ test_level_platfroms_list = [Platform(FLOOR_POSITION, FLOOR_SIZE, FLOOR_FILENAME
                           Platform(SECOND_PLATFORM_POSITION, SECOND_PLATFORM_SIZE, PLATFORM_FILENAME),
                           WinPlatform(WIN_POSITION, WIN_SIZE, PLATFORM_FILENAME)
                           ]
-test_level_enemy_list = [Enemy(copy(FIRST_ENEMY_POSITION))]
+test_level_enemy_list = [Enemy(copy(FIRST_ENEMY_POSITION)), Enemy(copy(SECOND_ENEMY_POSITION)), Enemy(copy(THIRD_ENEMY_POSITION))]
 test_level_text_dict = {}
 test_level_trigger_list = []
 
