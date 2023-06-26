@@ -1,3 +1,4 @@
+import mouse
 import pygame as pg
 
 
@@ -23,4 +24,5 @@ class Button:
 
     def clicked(self):
         self.on_click_function()
+        mouse.release('left')
 

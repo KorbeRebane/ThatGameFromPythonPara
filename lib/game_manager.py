@@ -1,12 +1,11 @@
 from copy import copy
 
-from pygame import draw, Rect
+from pygame import Rect, draw
 
 from lib.background import Background
 from lib.camera import Camera
-from lib.constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD, ENEMY_DAMAGE, PLAYER_DAMAGE, \
-    ENEMY_WIDTH, HEALTH_POINTS_ENEMY, GREEN, RED, BLACK, \
-    HEALTH_POINTS, PLAYER_WIDTH, SCALE, TIME_BETWEEN_ATTACK_ENEMY
+from lib.constants import ENEMY_WIDTH, SCALE, HEALTH_POINTS_ENEMY, RED, BLACK, HEALTH_POINTS, PLAYER_WIDTH, \
+    TIME_BETWEEN_ATTACK_ENEMY, PLAYER_DAMAGE, ENEMY_DAMAGE
 from lib.interface import GameScreen
 from lib.player import Player
 from lib.text_engine import TextSurface
@@ -20,7 +19,6 @@ class GameManager:
         self.return_to_inital_states('1')
 
         sound_manager.play_music("back_music")
-
 
     def draw(self, surface):
         self.background.draw_game_window(surface)
@@ -37,12 +35,12 @@ class GameManager:
                 draw.rect(surface, RED, health_bar_rect)  # Рисуем полоску здоровья
                 draw.rect(surface, BLACK, health_bar_rect, 2)  # Рисуем обводку полоски здоровья
 
-        if self.player.health_points > 0:
+        if self.player.is_alive:
             self.player.draw(surface, self.camera.position)
             health_pos_x = self.player.position[0] - self.camera.position[0]
             health_pos_y = self.player.position[1] - self.camera.position[1] - 25
             health_width = PLAYER_WIDTH  # Ширина картинки игрока
-            health_height = 15 * SCALE # Высота полоски здоровья
+            health_height = 15 * SCALE  # Высота полоски здоровья
             health_ratio = self.player.health_points / HEALTH_POINTS  # Отношение текущего здоровья к максимальному
             health_bar_width = int(health_width * health_ratio)
             health_bar_rect = Rect(health_pos_x, health_pos_y, health_bar_width, health_height)
@@ -65,12 +63,13 @@ class GameManager:
                 enemy.enemy_attack(enemy.rect_for_fight, self.player.rect)
             if enemy.health_points >= 0:
                 self.enemies_rects = [e.rect for e in self.enemies if e.health_points > 0] # Rect врагов исчезает после смерти
+
                 if enemy.attack_timer > 0:
                     enemy.attack_timer -= 1
                     enemy.attack_frame_counter += 1
+
                     if enemy.attack_frame_counter >= TIME_BETWEEN_ATTACK_ENEMY:
                         enemy.attack_frame_counter = 0
-
 
                 if self.player.is_attacking:
                     enemy.get_damage_from_player(self.player, damage=PLAYER_DAMAGE)
@@ -78,28 +77,31 @@ class GameManager:
                 if enemy.is_attacking:
                     self.player.get_damage_from_enemy(enemy, enemy.rect_for_fight, damage=ENEMY_DAMAGE)
 
+            for trigger in self.triggers:  # если мы контактируем с триггером, то враг разворачивается
+                trigger.contact_enemy(enemy)
+
+        # for enemy in self.enemies:
+        #     self.enemies_rects = [e.rect for e in self.enemies if e.is_alive]
+        #     if self.player.is_attacking:
+        #         enemy.get_damage(self.player.rect)
+        #     enemy.move(self.platforms_rects, self.player, can_we_move=self.text_surface.is_text_open) # can_we_move - открыт ли текст
+
         # Тот самый вин\луз в геймманагере
-        if self.platforms[len(self.platforms)-1].win(self.player.position): # Пердача последней, победной, платформе позиции игрока
+        if self.platforms[len(self.platforms) - 1].win(self.player.position):  # Пердача последней, победной, платформе позиции игрока
             new_state = 'win'
-        if self.player.health_points == 0: # Если нет хп
+        if self.player.health_points == 0:  # Если нет хп
             new_state = 'lose'
 
         for trigger in self.triggers: # если мы контактируем с триггером, то вызывается определённый текст. КОСТЫЛЬ
             if trigger.contact(self.player):
                 self.text_surface.put_text(trigger.number)
+                self.player.hp_regen()
 
-        self.text_surface.continue_text(mouse_pressed)
+        if self.text_surface.is_text_open:
+            self.text_surface.continue_text(mouse_pressed)
 
-        # Camera movement, КОСТЫЛЬ
-        if self.camera.position[0] <= self.player.position[0] - BORDER_XR:
-            self.camera.position[0] = self.player.position[0] - BORDER_XR
-        if self.camera.position[0] >= self.player.position[0] - BORDER_XL:
-            self.camera.position[0] = self.player.position[0] - BORDER_XL
-
-        if self.camera.position[1] <= self.player.position[1] - BORDER_YD:
-            self.camera.position[1] = self.player.position[1] - BORDER_YD
-        elif self.camera.position[1] >= self.player.position[1] - BORDER_YH:
-            self.camera.position[1] = self.player.position[1] - BORDER_YH
+        # Camera movement,
+        self.camera.camera_movement(self.player)
 
         return new_state, -1
 

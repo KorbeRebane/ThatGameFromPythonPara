@@ -1,3 +1,5 @@
+import time
+
 import pygame as pg
 from pygame import Rect
 
@@ -24,19 +26,23 @@ class Platform:
 
 
 class Trigger(Platform):
-    def __init__(self, position, size, texture, number):
+    def __init__(self, position, size, texture, number=None):
         super().__init__(position, size, texture)
         self.is_activated = False
         self.number = number
+        self.current_time = 0
 
     def contact(self, player):
-        if pg.Rect.colliderect(self.rect, player.rect) and not self.is_activated: # Если мы встаём на триггер то он активируется
+        if pg.Rect.colliderect(self.rect,
+                               player.rect) and not self.is_activated and self.number is not None:  # Если мы встаём на триггер то он активируется
             self.is_activated = True
             return True
 
-    @property
-    def ret_number(self):
-        return self.number
+    def contact_enemy(self, enemy):
+        if pg.Rect.colliderect(self.rect, enemy.rect):
+            if time.time() - self.current_time > 1:
+                self.current_time = time.time()
+                enemy.walking_left, enemy.walking_right = enemy.walking_right, enemy.walking_left
 
 
 class WinPlatform(Platform):
