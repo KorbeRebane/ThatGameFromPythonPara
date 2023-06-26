@@ -77,6 +77,9 @@ class GameManager:
                 if enemy.is_attacking:
                     self.player.get_damage_from_enemy(enemy, enemy.rect_for_fight, damage=ENEMY_DAMAGE)
 
+            for trigger in self.triggers:  # если мы контактируем с триггером, то враг разворачивается
+                trigger.contact_enemy(enemy)
+
         # for enemy in self.enemies:
         #     self.enemies_rects = [e.rect for e in self.enemies if e.is_alive]
         #     if self.player.is_attacking:
@@ -92,6 +95,7 @@ class GameManager:
         for trigger in self.triggers: # если мы контактируем с триггером, то вызывается определённый текст. КОСТЫЛЬ
             if trigger.contact(self.player):
                 self.text_surface.put_text(trigger.number)
+                self.player.hp_regen()
 
         if self.text_surface.is_text_open:
             self.text_surface.continue_text(mouse_pressed)
