@@ -35,7 +35,7 @@ class MenuManager:
         self.buttons.append(button_exit)
 
     def update(self, pressed_keys, upped_keys, mouse_pressed, mouse_upped):
-        if mouse.is_pressed('left'):
+        if pg.mouse.get_pressed()[0]:
             mouse_position = pg.mouse.get_pos()
             mouse_x, mouse_y = mouse_position
             for button in self.buttons:
@@ -44,8 +44,6 @@ class MenuManager:
                         button.position[1] < mouse_y < button.position[1] + \
                         button.size[1]:
                     button.clicked()
-                    mouse.release('left')
-                    print(time.time(), '1')
 
         if self.level_list:
             self.level_list = False
@@ -131,7 +129,6 @@ class LevelListManager():
                         button.position[1] < mouse_y < button.position[1] + \
                         button.size[1]:
                     button.clicked()
-                    print(time.time(), '2')
 
         if self.start_level > 0:  # Идём на уровень
             return "game", self.start_level
