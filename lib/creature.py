@@ -1,12 +1,11 @@
 from copy import copy
-import time
 
 import pygame as pg
 from pygame import Rect
 
-from .constants import SCALE, PLAYER_SPEED, HEALTH_POINTS, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
-    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT
-from .utilities import scale_image
+from lib.constants import SCALE, PLAYER_SPEED, HEALTH_POINTS, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
+    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT, PLAYER_WIDTH
+from lib.utilities import scale_image
 
 
 class Creature:
@@ -14,6 +13,7 @@ class Creature:
     NUMBER_OF_JUMPS = 1
 
     def __init__(self, image, attack_image, position, health_points, damage):
+
         self.attack_image = pg.image.load(attack_image)
         self.attack_image = scale_image(self.attack_image, SCALE)
         self.idle_image = pg.image.load(image)
@@ -30,6 +30,7 @@ class Creature:
         self.walking_right = False
         self.looking_left = False
         self.in_jump = False
+        self.go_down = False
         self.jumps_count = 1
 
         self.not_idle_counter = 0
@@ -60,6 +61,10 @@ class Creature:
             self.speed[1] = -JUMP_SPEED
             self.jumps_count -= 1
 
+    def go_down(self):
+        if self.go_down:
+            self.position[1] = self.position[1] + 1 + PLAYER_HEIGHT
+
     def move_physically(self, platform_rects, can_we_move): # can_we_move - открыт ли текст
         if not can_we_move:
             if self.in_jump:
@@ -88,7 +93,6 @@ class Creature:
             else:
                 self.speed[1] += G * DELTA_T
 
-
     def get_damage(self, damage):
         # тут будут условия на получение урона
         self.health_points -= damage
@@ -109,10 +113,18 @@ class Creature:
         height = self.image.get_height()
         return Rect(x, y, width, height)
 
-    @property
-    def view_zone(self):
-        x = self.position[0] - VIEW_RADIUS /2 + ENEMY_WIDTH /2  # На плюс ВИЕВ_РАДИУС от нашей позиции видим
-        y = self.position[1] - VIEW_RADIUS /2 + ENEMY_HEIGHT /2
-        width = self.image.get_width() + VIEW_RADIUS # один ВИЕВ_РАДИУС в одну сторону и один в другую
-        height = self.image.get_height() + VIEW_RADIUS
-        return Rect(x, y, width, height)
+    # @property
+    # def view_zone(self):
+    #     x = self.position[0] - 2 * VIEW_RADIUS /2 + ENEMY_WIDTH /2  # На плюс ВИЕВ_РАДИУС от нашей позиции видим
+    #     y = self.position[1] - 2 * VIEW_RADIUS /2 + ENEMY_HEIGHT /2
+    #     width = self.image.get_width() + 2 * VIEW_RADIUS # один ВИЕВ_РАДИУС в одну сторону и один в другую
+    #     height = self.image.get_height() + VIEW_RADIUS
+    #     return Rect(x, y, width, height)
+
+    # @property
+    # def under_zone(self):
+    #     x = self.position[0]
+    #     y = self.position[1] + self.image.get_height()
+    #     width = self.image.get_width() / 2
+    #     height = 50
+    #     return Rect(x, y, width, height)

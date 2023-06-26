@@ -1,17 +1,13 @@
-import time
 from copy import copy
 
-from .background import Background
-from .camera import Camera
-from .constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD
-from .interface import GameScreen
-from .player import Player
-from .enemy import Enemy
-from .text_engine import TextSurface
-# from ..source import levels_dict
+from lib.background import Background
+from lib.camera import Camera
+from lib.constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD
+from lib.interface import GameScreen
+from lib.player import Player
+from lib.enemy import Enemy
+from lib.text_engine import TextSurface
 from source.levels.levels import levels_dict
-
-# from levels.levels import levels_dict
 
 
 class GameManager:
@@ -50,7 +46,7 @@ class GameManager:
 
 
         # Тот самый вин\луз в геймманагере
-        if self.platforms[len(self.platforms)-1].win(self.player.position): # Пердача последней, победной, платформе позиции игрока
+        if self.platforms[-1].win(self.player.position): # Пердача последней, победной, платформе позиции игрока
             new_state = 'menu'
         if self.player.health_points == 0: # Если нет хп
             new_state = 'menu'
@@ -85,4 +81,3 @@ class GameManager:
         self.camera = Camera()
         self.text_surface = TextSurface(levels_dict[f'{level}_text'])
         self.triggers = levels_dict[f'{level}_triggers']
-        # self.invisible_platforms_enemy = levels_dict[f'{level}_triggers']
