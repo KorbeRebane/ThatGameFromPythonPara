@@ -1,7 +1,7 @@
 import pygame as pg
 
 from lib.constants import PLAYER_FILENAME, START_POSITION_X, PLAYER_SPEED, \
-    START_POSITION_Y, HEALTH_POINTS, PLAYER_DAMAGE, PLAYER_SPEED_LIST, PLAYER_ATTACK_FILENAME, \
+    START_POSITION_Y, HEALTH_POINTS, PLAYER_DAMAGE, WIN_POSITION, PLAYER_SPEED_LIST, PLAYER_ATTACK_FILENAME, \
     TIME_OF_ATTACK
 from lib.creature import Creature
 
@@ -12,15 +12,15 @@ class Player(Creature):
     def __init__(self):
         super().__init__(PLAYER_FILENAME, PLAYER_ATTACK_FILENAME, [START_POSITION_X, START_POSITION_Y], HEALTH_POINTS, PLAYER_DAMAGE)
 
-    # def game_states(self):
-    #     if self.health_points != 0:
-    #         if self.position[0] >= WIN_POSITION[0]:
-    #             pass
-    #         else:
-    #             return "game"
-    #     elif self.health_points == 0:
-    #         self.health_points = 3
-    #         return "menu"
+    def game_states(self):
+        if self.health_points != 0:
+            if self.position[0] >= WIN_POSITION[0]:
+                pass
+            else:
+                return "game"
+        elif self.health_points == 0:
+            self.health_points = 3
+            return "menu"
 
     def move(self, pressed_keys, upped_keys, platform_rects, can_we_move): # can_we_move - открыт ли текст
         if pg.K_d in pressed_keys or pg.K_RIGHT in pressed_keys:

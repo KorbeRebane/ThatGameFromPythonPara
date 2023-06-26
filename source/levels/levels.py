@@ -14,7 +14,7 @@ test_level_platfroms_list = [Platform(FLOOR_POSITION, FLOOR_SIZE, FLOOR_FILENAME
                                       PLATFORM_FILENAME),
                              Platform(FOURTH_ZERO_LEVEL_PLATFORM_POSITION, FOURTH_ZERO_LEVEL_PLATFORM_SIZE,
                                       PLATFORM_FILENAME),
-                             WinPlatform(WIN_0_POSITION, WIN_0_SIZE, PLATFORM_FILENAME)
+                             WinPlatform(WIN_POSITION, WIN_SIZE, PLATFORM_FILENAME)
                              ]
 test_level_enemy_list = [Enemy(copy(FIRST_ENEMY_POSITION))]
 test_level_text_dict = {}
@@ -41,7 +41,7 @@ first_level_platfroms_list = [Platform(FLOOR_POSITION, FLOOR_SIZE, FLOOR_FILENAM
                               Platform(SEVEN_FIRST_LEVEL_PLATFORM_POSITION, SEVEN_FIRST_LEVEL_PLATFORM_SIZE,
                                        PLATFORM_FILENAME),
 
-                              WinPlatform(WIN_1_POSITION, WIN_1_SIZE, PLATFORM_FILENAME)
+                              WinPlatform(WIN_POSITION, WIN_SIZE, PLATFORM_FILENAME)
                               ]
 first_level_enemy_list = []
 first_level_text_dict = {0: 'Автор: Первая строчка', 1: 'Автор: Хм-м, что это'}
@@ -80,86 +80,22 @@ second_level_platfroms_list = [Platform(FLOOR_POSITION, FLOOR_SIZE, FLOOR_FILENA
                                         PLATFORM_FILENAME),
                                Platform(TWELVE_SECOND_LEVEL_PLATFORM_POSITION, TWELVE_SECOND_LEVEL_PLATFORM_SIZE,
                                         PLATFORM_FILENAME),
-                               Platform(THIRTEEN_SECOND_LEVEL_PLATFORM_POSITION, THIRTEEN_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(FOURTEEN_SECOND_LEVEL_PLATFORM_POSITION, FOURTEEN_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(FIFTEEN_SECOND_LEVEL_PLATFORM_POSITION, FIFTEEN_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(SIXTEEN_SECOND_LEVEL_PLATFORM_POSITION, SIXTEEN_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(SEVENTEEN_SECOND_LEVEL_PLATFORM_POSITION, SEVENTEEN_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(EIGHTEEN_SECOND_LEVEL_PLATFORM_POSITION, EIGHTEEN_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(NINETEEN_SECOND_LEVEL_PLATFORM_POSITION, NINETEEN_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTY_SECOND_LEVEL_PLATFORM_POSITION, TWENTY_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYONE_SECOND_LEVEL_PLATFORM_POSITION, TWENTYONE_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYTWO_SECOND_LEVEL_PLATFORM_POSITION, TWENTYTWO_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYTHREE_SECOND_LEVEL_PLATFORM_POSITION,
-                                        TWENTYTHREE_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYFOUR_SECOND_LEVEL_PLATFORM_POSITION,
-                                        TWENTYFOUR_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYFIVE_SECOND_LEVEL_PLATFORM_POSITION,
-                                        TWENTYFIVE_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYSIX_SECOND_LEVEL_PLATFORM_POSITION, TWENTYSIX_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYSEVEN_SECOND_LEVEL_PLATFORM_POSITION, TWENTYSEVEN_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYEIGHT_SECOND_LEVEL_PLATFORM_POSITION, TWENTYEIGHT_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(TWENTYNINE_SECOND_LEVEL_PLATFORM_POSITION,
-                                        TWENTYNINE_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(THIRTY_SECOND_LEVEL_PLATFORM_POSITION,
-                                        THIRTY_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
-                               Platform(THIRTYONE_SECOND_LEVEL_PLATFORM_POSITION,
-                                        THIRTYONE_SECOND_LEVEL_PLATFORM_SIZE,
-                                        PLATFORM_FILENAME),
 
-                               WinPlatform(WIN_2_POSITION, WIN_2_SIZE, PLATFORM_FILENAME)
+                               WinPlatform(WIN_POSITION, WIN_SIZE, PLATFORM_FILENAME)
                                ]
 second_level_enemy_list = [Enemy(copy(FIRST_SECOND_LEVEL_ENEMY_POSITION)),
                            Enemy(copy(SECOND_SECOND_LEVEL_ENEMY_POSITION)),
                            Enemy(copy(THIRD_SECOND_LEVEL_ENEMY_POSITION)),
                            Enemy(copy(FOURTH_SECOND_LEVEL_ENEMY_POSITION)),
                            Enemy(copy(FIFTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(SIXTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(SEVENTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(EIGHTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(NINTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(TENTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(ELEVENTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(TWELVTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(THIRTEENTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(FOURTEENTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(FIFTEENTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(SIXTEENTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(SEVENTEENTH_SECOND_LEVEL_ENEMY_POSITION)),
-                           Enemy(copy(EIGHTEENTH_SECOND_LEVEL_ENEMY_POSITION))
-                           ]
+                           Enemy(copy(SIXTH_SECOND_LEVEL_ENEMY_POSITION))]
 second_level_text_dict = {}
 second_level_trigger_list = [Trigger(FIRST_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_POSITION,
                                      FIRST_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_SIZE,
                                      PLATFORM_FILENAME),
                              Trigger(SECOND_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_POSITION,
                                      SECOND_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_SIZE,
-                                     PLATFORM_FILENAME),
-                             Trigger(THIRD_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_POSITION,
-                                     THIRD_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_SIZE,
-                                     PLATFORM_FILENAME),
-                             Trigger(FOURTH_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_POSITION,
-                                     FOURTH_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_SIZE,
-                                     PLATFORM_FILENAME)
-                             ]
+                                     PLATFORM_FILENAME)]
 
 # second_level_invisible_platform_enemy_list = [Platform(FIRST_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_POSITION,
 #                                                        FIRST_SECOND_LEVEL_INVISIBLE_PLATFORM_ENEMY_SIZE,
@@ -188,7 +124,7 @@ third_level_platfroms_list = [Platform(FLOOR_POSITION, FLOOR_SIZE, FLOOR_FILENAM
                               Platform(SEVEN_THIRD_LEVEL_PLATFORM_POSITION, SEVEN_THIRD_LEVEL_PLATFORM_SIZE,
                                        PLATFORM_FILENAME),
 
-                              WinPlatform(WIN_3_POSITION, WIN_3_SIZE, PLATFORM_FILENAME)
+                              WinPlatform(WIN_POSITION, WIN_SIZE, PLATFORM_FILENAME)
                               ]
 third_level_enemy_list = []
 third_level_text_dict = {}

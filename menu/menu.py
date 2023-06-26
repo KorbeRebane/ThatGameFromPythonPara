@@ -1,11 +1,16 @@
 import sys
-
+import mouse
 import pygame as pg
+from pynput.mouse import Button as button_
+from pynput.mouse import Controller
+
 
 from lib.constants import BUTTON_NEW_GAME_SIZE_WIDTH, SCALE, BUTTON_NEW_GAME_SIZE_HEIGHT, BUTTON_NEW_GAME_POSITION_Y, \
     BUTTON_NEW_GAME_POSITION_X, BUTTON_EXIT_SIZE_WIDTH, BUTTON_EXIT_POSITION_X, BUTTON_EXIT_POSITION_Y, \
     BUTTON_EXIT_SIZE_HEIGHT
 from menu.button import Button
+
+mouse_ = Controller()
 
 
 class MenuManager:
@@ -33,19 +38,24 @@ class MenuManager:
         self.buttons.append(button_exit)
 
     def update(self, pressed_keys, upped_keys, mouse_pressed, mouse_upped):
-        if pg.mouse.get_pressed()[0]:
+
+        if mouse.is_pressed('left'):
+            print(True)
+        if mouse.is_pressed('left'):
             mouse_position = pg.mouse.get_pos()
             mouse_x, mouse_y = mouse_position
             for button in self.buttons:
-                if button.position[0] < mouse_x < button.position[0] +\
-                     button.size[0] and \
-                     button.position[1] < mouse_y < button.position[1] + \
-                     button.size[1]:
+                if button.position[0] < mouse_x < button.position[0] + \
+                        button.size[0] and \
+                        button.position[1] < mouse_y < button.position[1] + \
+                        button.size[1]:
 
                     button.clicked()
+                    mouse_.release(button_.left)
 
         if self.level_list:
             self.level_list = False
+            # pg.mouse.set_pos([616, 372])
             return "level_list", -1
 
         return "menu", -1
@@ -61,6 +71,7 @@ class MenuManager:
     def exit(self):
         pg.quit()
         sys.exit()
+
 
 class LevelListManager:
 
@@ -115,7 +126,8 @@ class LevelListManager:
         self.buttons.append(to_menu_button)
 
     def update(self, pressed_keys, upped_keys, mouse_pressed, mouse_upped):
-        if pg.mouse.get_pressed()[0]:
+        if mouse.is_pressed('left'):
+
             mouse_position = pg.mouse.get_pos()
             mouse_x, mouse_y = mouse_position
             for button in self.buttons:

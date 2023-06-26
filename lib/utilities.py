@@ -1,6 +1,7 @@
 import sys
 import pygame as pg
 
+
 def get_all_pressed_keys():
     pressed_keys = []
     upped_keys = []
