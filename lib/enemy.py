@@ -2,7 +2,8 @@ import pygame as pg
 import random
 
 from lib.constants import ENEMY_FILENAME, HEALTH_POINTS_ENEMY, ENEMY_DAMAGE, HEALTH_POINTS, PLAYER_SPEED, \
-    DELTA_T, PLATFORM_HEIGHT, PLAYER_DAMAGE, TIME_OF_ATTACK, ENEMY_ATTACK_FILENAME, SPEED_OF_ATTACK_ENEMY
+    DELTA_T, PLATFORM_HEIGHT, ENEMY_ATTACK_FILENAME, \
+    TIME_BETWEEN_ATTACK_ENEMY
 from lib.creature import Creature
 
 
@@ -46,17 +47,23 @@ class Enemy(Creature):
     def enemy_attack(self, enemy_rect_in_attack, rect_player_in_idle):
         if enemy_rect_in_attack.colliderect(rect_player_in_idle):
             if self.attack_timer == 0:
-                self.image = self.attack_image
+                # self.image = self.attack_image
                 self.is_attacking = True
-                self.attack_timer = SPEED_OF_ATTACK_ENEMY  # Устанавливаем таймер на заданное количество кадров
+                self.attack_timer = TIME_BETWEEN_ATTACK_ENEMY  # Устанавливаем таймер на заданное количество кадров
                 self.attack_frame_counter = 0  # Сбрасываем счетчик кадров
+            elif self.attack_timer == int(self.attack_frame_counter / 2):
+                self.image = self.attack_image
             else:
                 self.is_attacking = False
 
 
+
     def get_damage_from_player(self, player, damage): #self = enemy
         if player.is_attacking and player.rect_for_fight.colliderect(self.rect):
-            self.health_points -= damage
+            if damage <= HEALTH_POINTS_ENEMY:
+                self.health_points -= damage
+            else:
+                self.health_points = 0
 
 
 

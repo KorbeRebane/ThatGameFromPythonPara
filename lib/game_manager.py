@@ -6,7 +6,7 @@ from lib.background import Background
 from lib.camera import Camera
 from lib.constants import BORDER_XL, BORDER_XR, BORDER_YH, BORDER_YD, ENEMY_DAMAGE, PLAYER_DAMAGE, \
     ENEMY_WIDTH, HEALTH_POINTS_ENEMY, GREEN, RED, BLACK, \
-    HEALTH_POINTS, PLAYER_WIDTH, SPEED_OF_ATTACK_ENEMY, SCALE
+    HEALTH_POINTS, PLAYER_WIDTH, SCALE, TIME_BETWEEN_ATTACK_ENEMY
 from lib.interface import GameScreen
 from lib.player import Player
 from lib.text_engine import TextSurface
@@ -64,13 +64,13 @@ class GameManager:
         for enemy in self.enemies:
             if enemy.health_points >= 0:
                 enemy.enemy_attack(enemy.rect_for_fight, self.player.rect)
-                self.enemies_rects = [e.rect for e in self.enemies if e.health_points > 0] # через врагов нельзя ходить
+                self.enemies_rects = [e.rect for e in self.enemies if e.health_points > 0] # Rect врагов исчезает после смерти
 
                 if enemy.attack_timer > 0:
                     enemy.attack_timer -= 1
                     enemy.attack_frame_counter += 1
 
-                    if enemy.attack_frame_counter >= SPEED_OF_ATTACK_ENEMY:
+                    if enemy.attack_frame_counter >= TIME_BETWEEN_ATTACK_ENEMY:
                         enemy.attack_frame_counter = 0
 
 

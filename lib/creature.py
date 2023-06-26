@@ -6,7 +6,8 @@ from pygame import Rect, draw
 
 from lib.constants import SCALE, PLAYER_SPEED, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
     GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT, NUMBER_OF_JUMPS, \
-    RADIUS_OF_ATTACK
+    RADIUS_OF_ATTACK_FORWARD, RADIUS_OF_ATTACK_BACK
+
 from lib.utilities import scale_image
 
 
@@ -48,8 +49,8 @@ class Creature:
             else:
                 image = pg.transform.flip(self.image, True, False)
                 surface.blit(image, [new_x, new_y])
-
         self.return_to_idle()
+
 
     def return_to_idle(self):
         if self.not_idle_counter != 0:
@@ -116,10 +117,10 @@ class Creature:
 
     @property
     def rect_for_fight(self): # Радиус, когда враг начинает на носить урон
-        x = self.position[0] - RADIUS_OF_ATTACK
+        x = self.position[0] - RADIUS_OF_ATTACK_BACK
         # x = self.position[0]
         y = self.position[1]
-        width = self.image.get_width() + RADIUS_OF_ATTACK
+        width = self.image.get_width() + RADIUS_OF_ATTACK_FORWARD
         # width = self.image.get_width()
         height = self.image.get_height()
         return Rect(x, y, width, height)

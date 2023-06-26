@@ -49,9 +49,11 @@ class Player(Creature):
             self.not_idle_counter = TIME_OF_ATTACK
 
 
-    def get_damage_from_enemy(self, enemy, rect_for_enemy, damage):  # self = player. А пишем после игрока
+    def get_damage_from_enemy(self, enemy, rect_for_enemy, damage):
         if enemy.is_attacking and not self.is_attacking and (
         self.rect.colliderect(rect_for_enemy)):
             self.health_points -= damage
+
+
 
 
