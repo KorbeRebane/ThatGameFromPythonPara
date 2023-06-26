@@ -1,12 +1,12 @@
 from copy import copy
-import time
 
 import pygame as pg
 from pygame import Rect
 
-from .constants import SCALE, PLAYER_SPEED, HEALTH_POINTS, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
-    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT
-from .utilities import scale_image
+from lib.constants import SCALE, PLAYER_SPEED, HEALTH_POINTS, PLAYER_SPEED_LIST, JUMP_SPEED, DELTA_T, G, \
+    GENERAL_MOVEMENT_SPEED, VIEW_RADIUS, PLAYER_HEIGHT, RADIUS_OF_ATTACK_BACK, RADIUS_OF_ATTACK_FORWARD, ENEMY_WIDTH, \
+    ENEMY_HEIGHT
+from lib.utilities import scale_image
 
 
 class Creature:
@@ -88,7 +88,6 @@ class Creature:
             else:
                 self.speed[1] += G * DELTA_T
 
-
     def get_damage(self, damage):
         # тут будут условия на получение урона
         self.health_points -= damage
@@ -111,8 +110,19 @@ class Creature:
 
     @property
     def view_zone(self):
-        x = self.position[0] - VIEW_RADIUS /2 + ENEMY_WIDTH /2  # На плюс ВИЕВ_РАДИУС от нашей позиции видим
-        y = self.position[1] - VIEW_RADIUS /2 + ENEMY_HEIGHT /2
-        width = self.image.get_width() + VIEW_RADIUS # один ВИЕВ_РАДИУС в одну сторону и один в другую
+        x = self.position[0] - 2 * VIEW_RADIUS / 2 + ENEMY_WIDTH / 2  # На плюс ВИЕВ_РАДИУС от нашей позиции видим
+        y = self.position[1] - 2 * VIEW_RADIUS / 2 + ENEMY_HEIGHT / 2
+        width = self.image.get_width() + 2 * VIEW_RADIUS  # один ВИЕВ_РАДИУС в одну сторону и один в другую
         height = self.image.get_height() + VIEW_RADIUS
         return Rect(x, y, width, height)
+
+    @property
+    def rect_for_fight(self):  # Радиус, когда враг начинает на носить урон
+        x = self.position[0] - RADIUS_OF_ATTACK_BACK
+        # x = self.position[0]
+        y = self.position[1]
+        width = self.image.get_width() + RADIUS_OF_ATTACK_FORWARD
+        # width = self.image.get_width()
+        height = self.image.get_height()
+        return Rect(x, y, width, height)
+

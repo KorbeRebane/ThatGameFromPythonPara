@@ -2,8 +2,6 @@ import time
 
 import pygame as pg
 from pygame import Rect
-# from enemy import Enemy
-
 
 class Platform:
     def __init__(self, position, size, texture):
@@ -35,7 +33,8 @@ class Trigger(Platform):
         self.current_time = 0
 
     def contact(self, player):
-        if pg.Rect.colliderect(self.rect, player.rect) and not self.is_activated and self.number is not None: # Если мы встаём на триггер то он активируется
+        if pg.Rect.colliderect(self.rect,
+                               player.rect) and not self.is_activated and self.number is not None:  # Если мы встаём на триггер то он активируется
             self.is_activated = True
             return True
 
@@ -43,11 +42,7 @@ class Trigger(Platform):
         if pg.Rect.colliderect(self.rect, enemy.rect):
             if time.time() - self.current_time > 1:
                 self.current_time = time.time()
-            enemy.walking_left, enemy.walking_right = enemy.walking_left, enemy.walking_right
-
-    @property
-    def ret_number(self):
-        return self.number
+                enemy.walking_left, enemy.walking_right = enemy.walking_right, enemy.walking_left
 
 
 class WinPlatform(Platform):
@@ -57,22 +52,3 @@ class WinPlatform(Platform):
     def win(self, player_position):
         if player_position[0] >= self.position[0]: # Если игрок дальше иксовой позиции финиша, то сработает
             return True
-
-#
-# class InvisiblePlatformEnemy(Platform):
-#
-#     def __init__(self, position, size):
-#         super().__init__(position, size)
-#         self.try_to_escape = False
-#
-#     def reverse_left(self, enemy):
-#         if pg.Rect.colliderect(self.rect, enemy.rect) and not self.try_to_escape:
-#             self.try_to_escape = True
-#             return True
-#
-#     def reverse_right(self, enemy):
-#         if pg.Rect.colliderect(self.rect, enemy.rect) and not self.try_to_escape:
-#             self.try_to_escape = True
-#             return True
-#
-
