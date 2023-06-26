@@ -24,7 +24,6 @@ class GameManager:
 
     def draw(self, surface):
         self.background.draw_game_window(surface)
-        self.player.draw(surface, self.camera.position)
         for enemy in self.enemies:
             if enemy.health_points > 0:
                 enemy.draw(surface, self.camera.position)
@@ -62,14 +61,13 @@ class GameManager:
         self.player.player_attack(mouse_pressed)
 
         for enemy in self.enemies:
-            if enemy.health_points >= 0:
+            if enemy.health_points > 0:
                 enemy.enemy_attack(enemy.rect_for_fight, self.player.rect)
+            if enemy.health_points >= 0:
                 self.enemies_rects = [e.rect for e in self.enemies if e.health_points > 0] # Rect врагов исчезает после смерти
-
                 if enemy.attack_timer > 0:
                     enemy.attack_timer -= 1
                     enemy.attack_frame_counter += 1
-
                     if enemy.attack_frame_counter >= TIME_BETWEEN_ATTACK_ENEMY:
                         enemy.attack_frame_counter = 0
 
@@ -82,9 +80,9 @@ class GameManager:
 
         # Тот самый вин\луз в геймманагере
         if self.platforms[len(self.platforms)-1].win(self.player.position): # Пердача последней, победной, платформе позиции игрока
-            new_state = 'menu'
+            new_state = 'win'
         if self.player.health_points == 0: # Если нет хп
-            new_state = 'menu'
+            new_state = 'lose'
 
         for trigger in self.triggers: # если мы контактируем с триггером, то вызывается определённый текст. КОСТЫЛЬ
             if trigger.contact(self.player):

@@ -13,16 +13,6 @@ class Player(Creature):
         super().__init__(PLAYER_FILENAME, PLAYER_ATTACK_FILENAME, [START_POSITION_X, START_POSITION_Y], HEALTH_POINTS,
                          PLAYER_DAMAGE)
 
-    def game_states(self):
-        if self.health_points != 0:
-            if self.position[0] >= WIN_POSITION[0]:
-                pass
-            else:
-                return "game"
-        elif self.health_points == 0:
-            self.health_points = 3
-            return "menu"
-
     def move(self, pressed_keys, upped_keys, platform_rects, can_we_move):  # can_we_move - открыт ли текст
         if pg.K_d in pressed_keys or pg.K_RIGHT in pressed_keys:
             self.walking_right = True
@@ -34,6 +24,7 @@ class Player(Creature):
             self.walking_left = False
         if pg.K_s in pressed_keys or pg.K_DOWN in pressed_keys:
             self.speed[1] = FALLING_SPEED
+
         if pg.K_SPACE in pressed_keys or pg.K_w in pressed_keys or pg.K_UP in pressed_keys:
             self.in_jump = True
 

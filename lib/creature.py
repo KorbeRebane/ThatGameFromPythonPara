@@ -116,12 +116,10 @@ class Creature:
         return Rect(x, y, width, height)
 
     @property
-    def rect_for_fight(self): # Радиус, когда враг начинает на носить урон
+    def rect_for_fight(self): # Радиус, когда враг начинает наносить урон
         x = self.position[0] - RADIUS_OF_ATTACK_BACK
-        # x = self.position[0]
         y = self.position[1]
         width = self.image.get_width() + RADIUS_OF_ATTACK_FORWARD
-        # width = self.image.get_width()
         height = self.image.get_height()
         return Rect(x, y, width, height)
 

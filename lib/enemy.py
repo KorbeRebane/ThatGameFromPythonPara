@@ -47,14 +47,10 @@ class Enemy(Creature):
     def enemy_attack(self, enemy_rect_in_attack, rect_player_in_idle):
         if enemy_rect_in_attack.colliderect(rect_player_in_idle):
             if self.attack_timer == 0:
-                # self.image = self.attack_image
                 self.is_attacking = True
                 self.attack_timer = TIME_BETWEEN_ATTACK_ENEMY  # Устанавливаем таймер на заданное количество кадров
                 self.attack_frame_counter = 0  # Сбрасываем счетчик кадров
-            elif self.attack_timer == int(self.attack_frame_counter / 2):
                 self.image = self.attack_image
-            else:
-                self.is_attacking = False
 
 
 

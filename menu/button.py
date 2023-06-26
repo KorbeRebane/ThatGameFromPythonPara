@@ -1,7 +1,5 @@
 import pygame as pg
 
-from lib.constants import SCALE, FONT_SIZE
-
 
 class Button:
 
@@ -11,7 +9,7 @@ class Button:
         self.text = text
         self.color = pg.color.Color(color)
 
-        self.font = pg.font.Font(None, FONT_SIZE)
+        self.font = pg.font.Font(None, 50)
         self.text_image = self.font.render(self.text, True, "black")
 
         self.image = pg.surface.Surface(self.size)
